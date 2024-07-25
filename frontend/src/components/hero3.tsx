@@ -178,7 +178,22 @@ export function Hero3() {
               <ul className="space-y-2">
                 <li>
                   <Link href="#" className="text-muted-foreground hover:text-foreground" prefetch={false}>
-                    Stablebridge
+                    Swap
+                  </Link>
+                </li>
+                <li>
+                  <Link href="#" className="text-muted-foreground hover:text-foreground" prefetch={false}>
+                    Bridge
+                  </Link>
+                </li>
+                <li>
+                  <Link href="#" className="text-muted-foreground hover:text-foreground" prefetch={false}>
+                    Stake
+                  </Link>
+                </li>
+                <li>
+                  <Link href="#" className="text-muted-foreground hover:text-foreground" prefetch={false}>
+                    Pool
                   </Link>
                 </li>
               </ul>

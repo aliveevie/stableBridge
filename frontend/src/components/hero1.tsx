@@ -1,5 +1,7 @@
 
 import Link from "next/link"
+import hero1 from '../../public/hero1.jpg';
+import Image from "next/image";
 
 export function Hero1() {
   return (
@@ -24,7 +26,7 @@ export function Hero1() {
               </Link>
             </div>
             <div className="hidden md:block">
-              <img src="/placeholder.svg" width="600" height="400" alt="Hero Image" className="rounded-lg" />
+              <Image src={hero1} width="600" height="400" alt="Hero Image" className="rounded-lg" />
             </div>
           </div>
         </div>
