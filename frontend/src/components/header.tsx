@@ -1,9 +1,11 @@
+"use client";
+
 import Link from "next/link"
 import { NavigationMenu, NavigationMenuList, NavigationMenuItem, NavigationMenuTrigger, NavigationMenuContent, NavigationMenuLink } from "@/components/ui/navigation-menu"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet"
 
-export function Header() {
+export function Header({ connectWallet } : {connectWallet:any}) {
   return (
     <header className="sticky top-0 z-50 w-full shadow-sm">
       <div className="container flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
@@ -90,7 +92,7 @@ export function Header() {
             Contact
           </Link>
         </nav>
-        <Button className="hidden md:inline-flex">Connect Wallet</Button>
+        <Button className="hidden md:inline-flex" onClick={connectWallet} >Connect Wallet</Button>
         <Sheet>
           <SheetTrigger asChild>
             <Button variant="outline" size="icon" className="md:hidden">
@@ -171,7 +173,7 @@ export function Header() {
                 <ContactIcon className="h-5 w-5" />
                 Contact
               </Link>
-              <Button className="w-full">Connect Wallet</Button>
+              <Button className="w-full" onClick={connectWallet} >Connect Wallet</Button>
             </nav>
           </SheetContent>
         </Sheet>
@@ -180,7 +182,7 @@ export function Header() {
   )
 }
 
-function ArrowRightIcon(props) {
+function ArrowRightIcon(props:any) {
   return (
     <svg
       {...props}
