@@ -1,5 +1,6 @@
 "use client";
 
+
 import Link from "next/link"
 import { NavigationMenu, NavigationMenuList, NavigationMenuItem, NavigationMenuTrigger, NavigationMenuContent, NavigationMenuLink } from "@/components/ui/navigation-menu"
 import { Button } from "@/components/ui/button"
@@ -9,7 +10,7 @@ export function Header({ connectWallet } : {connectWallet:any}) {
   return (
     <header className="sticky top-0 z-50 w-full shadow-sm">
       <div className="container flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
-        <Link href="#" className="flex items-center gap-2" prefetch={false}>
+        <Link href="/" className="flex items-center gap-2" prefetch={false}>
           <SignpostIcon className="h-6 w-6 bg-gradient-to-r from-[#FF6B6B] via-[#FFA500] to-[#FFD700] bg-clip-text text-transparent" />
           <span className="text-lg font-semibold bg-gradient-to-r from-[#9B59B6] via-[#3498DB] to-[#1ABC9C] bg-clip-text text-transparent">
             StableBridge
@@ -17,7 +18,7 @@ export function Header({ connectWallet } : {connectWallet:any}) {
         </Link>
         <nav className="hidden items-center gap-6 md:flex">
           <Link
-            href="#"
+            href="/"
             className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
             prefetch={false}
           >
@@ -41,7 +42,7 @@ export function Header({ connectWallet } : {connectWallet:any}) {
                   <div className="grid w-[200px] gap-2 p-2">
                     <NavigationMenuLink asChild>
                       <Link
-                        href="#"
+                        href="/swap"
                         className="group flex items-center justify-between rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50"
                         prefetch={false}
                       >
