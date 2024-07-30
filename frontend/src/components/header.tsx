@@ -5,7 +5,7 @@ import { NavigationMenu, NavigationMenuList, NavigationMenuItem, NavigationMenuT
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet"
 
-export function Header({ connectWallet } : {connectWallet:any}) {
+export function Header({ connectWallet } : { connectWallet:any }) {
   return (
     <header className="sticky top-0 z-50 w-full shadow-sm">
       <div className="container flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
@@ -51,7 +51,7 @@ export function Header({ connectWallet } : {connectWallet:any}) {
                     </NavigationMenuLink>
                     <NavigationMenuLink asChild>
                       <Link
-                        href="#"
+                        href="/bridge"
                         className="group flex items-center justify-between rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50"
                         prefetch={false}
                       >
