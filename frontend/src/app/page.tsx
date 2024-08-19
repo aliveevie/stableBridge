@@ -9,11 +9,14 @@ import {
  // AuthDetails,
   showConnect,
 } from "@stacks/connect";
+import { useEffect, useState } from "react";
 
 export default function Home() {
 
   const appConfig = new AppConfig(["store_write"]);
   const userSession = new UserSession({ appConfig });
+
+  const [userData, setUserData] = useState<any>([]);
 
   const appDetails = {
     name: "StableBridge",
@@ -26,8 +29,22 @@ export default function Home() {
       onFinish: () => window.location.reload(),
       userSession,
     });
-    console.log("You are clicking!")
+   // console.log("You are clicking!")
   };
+
+  useEffect(() => {
+    if (userSession.isSignInPending()) {
+      userSession.handlePendingSignIn().then((userData: any) => {
+        setUserData(userData);
+      });
+    } else if (userSession.isUserSignedIn()) {
+      setUserData(userSession.loadUserData());
+    }
+  }, []);
+  
+  console.log(userData);
+
+
 
   return (
     <>
