@@ -8,6 +8,7 @@ import {
   UserSession,
  // AuthDetails,
   showConnect,
+  disconnect
 } from "@stacks/connect";
 import { useEffect, useState } from "react";
 
@@ -32,6 +33,8 @@ export default function Home() {
    // console.log("You are clicking!")
   };
 
+
+
   useEffect(() => {
     if (userSession.isSignInPending()) {
       userSession.handlePendingSignIn().then((userData: any) => {
@@ -48,7 +51,7 @@ export default function Home() {
 
   return (
     <>
-      <Header connectWallet={connectWallet} />
+      <Header connectWallet={connectWallet} userData={userData} />
       <Hero1 />
       <Hero2 />
       <Hero3 />
