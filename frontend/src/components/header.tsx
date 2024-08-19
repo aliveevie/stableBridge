@@ -4,8 +4,28 @@ import Link from "next/link"
 import { NavigationMenu, NavigationMenuList, NavigationMenuItem, NavigationMenuTrigger, NavigationMenuContent, NavigationMenuLink } from "@/components/ui/navigation-menu"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet"
+import { useEffect, useState } from "react";
+import { disconnect } from "@stacks/connect";
 
-export function Header({ connectWallet } : { connectWallet:any }) {
+
+type HeaderProps = {
+  connectWallet: () => any; 
+  userData: any;
+};
+
+
+
+export function Header({ connectWallet, userData } :  HeaderProps ) {
+
+  const [ connect, setConnect ] = useState("Connect Wallet");
+
+  function disconnectWallet(){
+      disconnect();
+      console.log("you are clicking and NOT Working!")
+  }
+
+ 
+  
   return (
     <header className="sticky top-0 z-50 w-full shadow-sm">
       <div className="container flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
@@ -92,7 +112,16 @@ export function Header({ connectWallet } : { connectWallet:any }) {
             Contact
           </Link>
         </nav>
-        <Button className="hidden md:inline-flex" onClick={connectWallet} >Connect Wallet</Button>
+
+      {!userData && <Button className="hidden md:inline-flex" onClick={connectWallet} >Connect Wallet</Button>
+ }
+
+        {userData && (
+          <Button className="hidden md:inline-flex" onClick={disconnectWallet}>
+            Disconnect Wallet
+          </Button>
+        )}
+
         <Sheet>
           <SheetTrigger asChild>
             <Button variant="outline" size="icon" className="md:hidden">
