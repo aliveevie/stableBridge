@@ -7,6 +7,7 @@ import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet"
 import { useEffect, useState } from "react";
 import { disconnect } from "@stacks/connect";
 import { WalletConnectButton } from "./wallet";
+import { WalletConnectMobile } from "./walletMobile";
 
 
 type HeaderProps = {
@@ -24,8 +25,6 @@ export function Header({ connectWallet, userData } :  HeaderProps ) {
       disconnect();
       console.log("you are clicking and NOT Working!")
   }
-
- 
   
   return (
     <header className="sticky top-0 z-50 w-full shadow-sm">
@@ -113,23 +112,7 @@ export function Header({ connectWallet, userData } :  HeaderProps ) {
             Contact
           </Link>
         </nav>
-        {/**
-         *  {!userData && <Button className="hidden md:inline-flex" onClick={connectWallet} >Connect Wallet</Button>
- }
-
-        {userData && (
-          <Button className="hidden md:inline-flex" onClick={disconnectWallet}>
-            Disconnect Wallet
-          </Button>
-        )}
-         * 
-         * 
-         */}
-
-         <WalletConnectButton />
-
-     
-
+              <WalletConnectButton />
         <Sheet>
           <SheetTrigger asChild>
             <Button variant="outline" size="icon" className="md:hidden">
@@ -210,7 +193,7 @@ export function Header({ connectWallet, userData } :  HeaderProps ) {
                 <ContactIcon className="h-5 w-5" />
                 Contact
               </Link>
-              <Button className="w-full" onClick={connectWallet} >Connect Wallet</Button>
+              <WalletConnectMobile />
             </nav>
           </SheetContent>
         </Sheet>
