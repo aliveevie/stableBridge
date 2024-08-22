@@ -12,7 +12,12 @@ import {
 } from "@stacks/connect";
 import { useEffect, useState } from "react";
 
-export default function Home() {
+import * as MicroStacks from '@micro-stacks/react';
+import { AppProps } from "next/app";
+import { ClientProvider } from "@micro-stacks/react";
+
+
+export default function Home({ Component, pageProps } : AppProps) {
 
   const appConfig = new AppConfig(["store_write"]);
   const userSession = new UserSession({ appConfig });
@@ -51,10 +56,17 @@ export default function Home() {
 
   return (
     <>
-      <Header connectWallet={connectWallet} userData={userData} />
+    <ClientProvider
+       appName="Nextjs + Microstacks"
+      appIconUrl="/vercel.png"
+    >
+    <Header connectWallet={connectWallet} userData={userData} />
       <Hero1 />
       <Hero2 />
       <Hero3 />
+      <Component {...pageProps} />
+    </ClientProvider>
+    
     </>
   );
 }

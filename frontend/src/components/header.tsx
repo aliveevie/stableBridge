@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet"
 import { useEffect, useState } from "react";
 import { disconnect } from "@stacks/connect";
+import { WalletConnectButton } from "./wallet";
 
 
 type HeaderProps = {
@@ -112,8 +113,8 @@ export function Header({ connectWallet, userData } :  HeaderProps ) {
             Contact
           </Link>
         </nav>
-
-      {!userData && <Button className="hidden md:inline-flex" onClick={connectWallet} >Connect Wallet</Button>
+        {/**
+         *  {!userData && <Button className="hidden md:inline-flex" onClick={connectWallet} >Connect Wallet</Button>
  }
 
         {userData && (
@@ -121,6 +122,13 @@ export function Header({ connectWallet, userData } :  HeaderProps ) {
             Disconnect Wallet
           </Button>
         )}
+         * 
+         * 
+         */}
+
+         <WalletConnectButton />
+
+     
 
         <Sheet>
           <SheetTrigger asChild>
