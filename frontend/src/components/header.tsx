@@ -17,7 +17,7 @@ type HeaderProps = {
 
 
 
-export function Header({ connectWallet, userData } :  HeaderProps ) {
+export function Header( ) {
 
   const [ connect, setConnect ] = useState("Connect Wallet");
 

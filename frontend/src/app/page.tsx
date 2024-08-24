@@ -60,7 +60,6 @@ export default function Home() {
        appName="Nextjs + Microstacks"
       appIconUrl="/vercel.png"
     >
-    <Header connectWallet={connectWallet} userData={userData} />
       <Hero1 />
       <Hero2 />
       <Hero3 />
