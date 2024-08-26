@@ -60,6 +60,7 @@ export default function Home() {
        appName="Nextjs + Microstacks"
       appIconUrl="/vercel.png"
     >
+    <Header  />
       <Hero1 />
       <Hero2 />
       <Hero3 />
