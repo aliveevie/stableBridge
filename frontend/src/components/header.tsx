@@ -91,7 +91,7 @@ export function Header( ) {
                     </NavigationMenuLink>
                     <NavigationMenuLink asChild>
                       <Link
-                        href="#"
+                        href="stake"
                         className="group flex items-center justify-between rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50"
                         prefetch={false}
                       >
