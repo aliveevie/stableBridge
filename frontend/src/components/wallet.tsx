@@ -8,10 +8,7 @@ export const WalletConnectButton = () => {
   const label = isRequestPending ? 'Loading...' : isSignedIn ? 'Sign out' : 'Connect wallet';
   return (
     <>
-      <ClientProvider 
-        appName="Nextjs + Microstacks"
-        appIconUrl="/vercel.png"
-      >
+     
         <Button className="hidden md:inline-flex"
         onClick={async () => {
           if (isSignedIn) await signOut();
@@ -20,7 +17,7 @@ export const WalletConnectButton = () => {
       >
         {label}
     </Button>
-      </ClientProvider>
+      
     </>
   
   );
