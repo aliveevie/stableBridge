@@ -17,6 +17,7 @@ import { AppProps } from "next/app";
 import { ClientProvider } from "@micro-stacks/react";
 
 
+
 export default function Home() {
 
   const appConfig = new AppConfig(["store_write"]);
@@ -52,20 +53,12 @@ export default function Home() {
   
   console.log(userData);
 
-
-
   return (
     <>
-    <ClientProvider
-       appName="Nextjs + Microstacks"
-      appIconUrl="/vercel.png"
-    >
-    <Header  />
       <Hero1 />
       <Hero2 />
       <Hero3 />
-      
-    </ClientProvider>
+    
     
     </>
   );
