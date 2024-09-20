@@ -8,7 +8,6 @@ export const WalletConnectButton = () => {
   const label = isRequestPending ? 'Loading...' : isSignedIn ? 'Sign out' : 'Connect wallet';
   return (
     <>
-     
         <Button className="hidden md:inline-flex"
         onClick={async () => {
           if (isSignedIn) await signOut();
@@ -17,8 +16,6 @@ export const WalletConnectButton = () => {
       >
         {label}
     </Button>
-      
     </>
-  
   );
 };

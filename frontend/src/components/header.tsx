@@ -10,15 +10,12 @@ import { WalletConnectButton } from "./wallet";
 import { WalletConnectMobile } from "./walletMobile";
 import { ClientProvider } from "@micro-stacks/react";
 
-
 type HeaderProps = {
   connectWallet: () => any; 
   userData: any;
 };
 
-
-
-export function Header( ) {
+export function Header() {
 
   const [ connect, setConnect ] = useState("Connect Wallet");
 
@@ -28,7 +25,7 @@ export function Header( ) {
   }
   
   return (
-      <ClientProvider>
+     
          <header className="sticky top-0 z-50 w-full shadow-sm">
         <div className="container flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
           <Link href="/" className="flex items-center gap-2" prefetch={false}>
@@ -201,7 +198,7 @@ export function Header( ) {
           </Sheet>
         </div>
       </header>
-      </ClientProvider>
+
   )
 }
 
@@ -491,3 +488,7 @@ function XIcon(props:any) {
     </svg>
   )
 }
+function microStacksClient(arg0: { appDetails: { name: string; icon: string; }; network: string; }) {
+  throw new Error("Function not implemented.");
+}
+

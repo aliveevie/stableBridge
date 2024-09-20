@@ -15,6 +15,7 @@ import { useEffect, useState } from "react";
 import * as MicroStacks from '@micro-stacks/react';
 import { AppProps } from "next/app";
 import { ClientProvider } from "@micro-stacks/react";
+import Head from "next/head";
 
 
 
@@ -55,11 +56,15 @@ export default function Home() {
 
   return (
     <>
+    <ClientProvider
+      appName="StableBridge"
+      appIconUrl=""
+    >
+      <Header />
       <Hero1 />
       <Hero2 />
       <Hero3 />
-    
-    
+    </ClientProvider>
     </>
   );
 }
