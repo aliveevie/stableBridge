@@ -8,7 +8,8 @@ export const WalletConnectButton = () => {
   const label = isRequestPending ? 'Loading...' : isSignedIn ? 'Sign out' : 'Connect wallet';
   return (
     <>
-        <Button className="hidden md:inline-flex"
+    <ClientProvider>
+    <Button className="hidden md:inline-flex"
         onClick={async () => {
           if (isSignedIn) await signOut();
           else await openAuthRequest();
@@ -16,6 +17,8 @@ export const WalletConnectButton = () => {
       >
         {label}
     </Button>
+    </ClientProvider>
+      
     </>
   );
 };

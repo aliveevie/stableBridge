@@ -56,15 +56,11 @@ export default function Home() {
 
   return (
     <>
-    <ClientProvider
-      appName="StableBridge"
-      appIconUrl=""
-    >
+    
       <Header />
       <Hero1 />
       <Hero2 />
       <Hero3 />
-    </ClientProvider>
     </>
   );
 }
