@@ -36,7 +36,7 @@ export default function Home() {
   return (
     <>
     
-      <Header />
+      
       <Hero1 />
       <Hero2 />
       <Hero3 />

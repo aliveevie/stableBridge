@@ -2,7 +2,7 @@ import { ClientProvider } from "@micro-stacks/react"
 
 export function Swap() {
   return (
-    <ClientProvider>
+    
       <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-[#1E293B] to-[#0F172A] text-white">
       <main className="w-full max-w-4xl p-6 md:p-10 bg-[#0F172A] rounded-2xl shadow-lg">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -64,7 +64,7 @@ export function Swap() {
         </div>
       </main>
     </div>
-    </ClientProvider>
+  
     
   )
 }
