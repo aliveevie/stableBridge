@@ -31,28 +31,7 @@ export default function Home() {
     icon: "https://i.postimg.cc/1tHS3xK0/Screenshot-from-2024-07-25-11-47-57.png",
   };
 
-  const connectWallet = () => {
-    showConnect({
-      appDetails,
-      onFinish: () => window.location.reload(),
-      userSession,
-    });
-   // console.log("You are clicking!")
-  };
-
-
-
-  useEffect(() => {
-    if (userSession.isSignInPending()) {
-      userSession.handlePendingSignIn().then((userData: any) => {
-        setUserData(userData);
-      });
-    } else if (userSession.isUserSignedIn()) {
-      setUserData(userSession.loadUserData());
-    }
-  }, []);
-  
-  console.log(userData);
+ 
 
   return (
     <>
