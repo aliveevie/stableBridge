@@ -1,12 +1,31 @@
 "use client";
 
-
 import Link from "next/link"
 import { NavigationMenu, NavigationMenuList, NavigationMenuItem, NavigationMenuTrigger, NavigationMenuContent, NavigationMenuLink } from "@/components/ui/navigation-menu"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet"
+import { useEffect, useState } from "react";
+import { disconnect } from "@stacks/connect";
+import { WalletConnectButton } from "./wallet";
+import { WalletConnectMobile } from "./walletMobile";
 
-export function Header({ connectWallet } : {connectWallet:any}) {
+
+type HeaderProps = {
+  connectWallet: () => any; 
+  userData: any;
+};
+
+
+
+export function Header( ) {
+
+  const [ connect, setConnect ] = useState("Connect Wallet");
+
+  function disconnectWallet(){
+      disconnect();
+      console.log("you are clicking and NOT Working!")
+  }
+  
   return (
     <header className="sticky top-0 z-50 w-full shadow-sm">
       <div className="container flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
@@ -52,7 +71,7 @@ export function Header({ connectWallet } : {connectWallet:any}) {
                     </NavigationMenuLink>
                     <NavigationMenuLink asChild>
                       <Link
-                        href="#"
+                        href="/bridge"
                         className="group flex items-center justify-between rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50"
                         prefetch={false}
                       >
@@ -62,7 +81,7 @@ export function Header({ connectWallet } : {connectWallet:any}) {
                     </NavigationMenuLink>
                     <NavigationMenuLink asChild>
                       <Link
-                        href="#"
+                        href="pool"
                         className="group flex items-center justify-between rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50"
                         prefetch={false}
                       >
@@ -72,7 +91,7 @@ export function Header({ connectWallet } : {connectWallet:any}) {
                     </NavigationMenuLink>
                     <NavigationMenuLink asChild>
                       <Link
-                        href="#"
+                        href="stake"
                         className="group flex items-center justify-between rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50"
                         prefetch={false}
                       >
@@ -93,7 +112,7 @@ export function Header({ connectWallet } : {connectWallet:any}) {
             Contact
           </Link>
         </nav>
-        <Button className="hidden md:inline-flex" onClick={connectWallet} >Connect Wallet</Button>
+              <WalletConnectButton />
         <Sheet>
           <SheetTrigger asChild>
             <Button variant="outline" size="icon" className="md:hidden">
@@ -174,7 +193,7 @@ export function Header({ connectWallet } : {connectWallet:any}) {
                 <ContactIcon className="h-5 w-5" />
                 Contact
               </Link>
-              <Button className="w-full" onClick={connectWallet} >Connect Wallet</Button>
+              <WalletConnectMobile />
             </nav>
           </SheetContent>
         </Sheet>
