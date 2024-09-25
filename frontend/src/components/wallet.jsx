@@ -49,7 +49,7 @@ export const WalletConnectButton = () => {
   }, []);
 
   return (
-    <Button className="hidden md:inline-flex"
+    <Button className="inline-flex"
       onClick={userData ? disconnectWallet : connectWallet}
     >
       {label}
