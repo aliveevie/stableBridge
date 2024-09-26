@@ -9,7 +9,18 @@ export function Swap() {
     // Mock wallet connection function
   };
 
-  console.log(userData); // You can now access userData here
+  fetch("https://api.hiro.so/metadata/v1/ft", {
+    method: "GET"
+  })
+    .then(response => response.json())
+    .then(data => {
+      console.log(data);
+    })
+    .catch(error => {
+      console.error('Error fetching data:', error);
+    });
+  
+
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-[#0F0F0F] text-white">
