@@ -16,6 +16,8 @@ export const WalletConnectButton = () => {
     icon: "https://freesvg.org/img/1541103084.png", // Replace with your icon URL
   };
 
+  console.log(userData);
+
   const connectWallet = () => {
     showConnect({
       appDetails,
