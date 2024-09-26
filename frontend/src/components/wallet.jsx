@@ -1,11 +1,12 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { Button } from './ui/button';
 import { AppConfig, UserSession, showConnect } from "@stacks/connect";
+import { UserContext } from '@/components/userContext';
 
 export const WalletConnectButton = () => {
-  const [userData, setUserData] = useState(undefined);
+  const { userData, setUserData } = useContext(UserContext);
   const [label, setLabel] = useState("Connect");
 
   const appConfig = new AppConfig(["store_write"]);
@@ -15,8 +16,6 @@ export const WalletConnectButton = () => {
     name: "StableBridge",
     icon: "https://freesvg.org/img/1541103084.png", // Replace with your icon URL
   };
-
-  console.log(userData);
 
   const connectWallet = () => {
     showConnect({
@@ -48,7 +47,7 @@ export const WalletConnectButton = () => {
       setUserData(userSession.loadUserData());
       setLabel("Disconnect");
     }
-  }, []);
+  }, [setUserData]);
 
   return (
     <Button className="inline-flex"

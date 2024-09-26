@@ -1,18 +1,15 @@
-import { useState } from "react";
-import { Button } from "./ui/button"; // Assume you have a Button component
+import { useContext } from "react";
+import { Button } from "./ui/button";
+import { UserContext } from "@/components/userContext"; // Import the context
 
 export function Swap() {
-  const [connected, setConnected] = useState(false);
+  const { userData } = useContext(UserContext); // Get userData from context
 
   const handleConnectWallet = () => {
     // Mock wallet connection function
-    setConnected(true);
   };
 
-
-
-
-  
+  console.log(userData); // You can now access userData here
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-[#0F0F0F] text-white">
@@ -23,8 +20,8 @@ export function Swap() {
         <div className="bg-[#1E1E1E] p-4 rounded-xl">
           <div className="flex justify-between items-center mb-4">
             <div className="text-gray-400">From</div>
-            <div className={`text-sm ${connected ? 'text-green-500' : 'text-red-500'}`}>
-              {connected ? 'Connected' : 'Not Connected'}
+            <div className={`text-sm ${userData ? 'text-green-500' : 'text-red-500'}`}>
+              {userData ? 'Connected' : 'Not Connected'}
             </div>
           </div>
           <div className="bg-[#2D2D2D] p-3 rounded-lg mb-4">
@@ -62,7 +59,7 @@ export function Swap() {
             className="w-full bg-[#9B51E0] text-white font-medium py-2 px-4 rounded-lg" 
             onClick={handleConnectWallet}
           >
-            {connected ? 'Swap STX for xUSD' : 'Connect Wallet'}
+            {userData ? 'Swap STX for xUSD' : 'Connect Wallet'}
           </Button>
         </div>
       </main>
