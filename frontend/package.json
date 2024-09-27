@@ -17,8 +17,10 @@
     "@radix-ui/react-navigation-menu": "^1.2.0",
     "@radix-ui/react-slot": "^1.1.0",
     "@stacks/connect": "^7.7.1",
+    "@velarprotocol/velar-sdk": "^0.6.7",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "cors": "^2.8.5",
     "lucide-react": "^0.414.0",
     "next": "^14.2.6",
     "react": "^18.3.1",
@@ -29,6 +31,7 @@
   },
   "devDependencies": {
     "@leather.io/rpc": "^2.1.9",
+    "@types/cors": "^2.8.17",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",

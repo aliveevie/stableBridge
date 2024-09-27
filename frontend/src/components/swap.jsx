@@ -12,6 +12,7 @@ export function Swap() {
   const [selectedToToken, setSelectedToToken] = useState(null)
   const [isFromDropdownOpen, setIsFromDropdownOpen] = useState(false)
   const [isToDropdownOpen, setIsToDropdownOpen] = useState(false)
+  const [velarTokens, setVelarTokens] = useState([]);
 
   useEffect(() => {
     function getData() {
@@ -27,7 +28,28 @@ export function Swap() {
         })
     }
     getData()
-  }, [])
+  }, []);
+
+
+  useEffect(() => {
+    function getData() {
+      fetch("https://api.velar.co/tickers", {
+        method: "GET"
+      })
+        .then(response => response.json())
+        .then(data => {
+          setVelarTokens(data.results)
+        })
+        .catch(error => {
+          console.error('Error fetching data:', error)
+        })
+    }
+    getData()
+  }, []);
+
+  console.log(velarTokens)
+
+
 
   const handleFromTokenSelect = (token) => {
     setSelectedFromToken(token)
