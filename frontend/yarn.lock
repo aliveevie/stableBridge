@@ -78,6 +78,23 @@
     "@jridgewell/resolve-uri" "^3.1.0"
     "@jridgewell/sourcemap-codec" "^1.4.14"
 
+"@leather.io/models@0.16.0":
+  version "0.16.0"
+  resolved "https://registry.npmjs.org/@leather.io/models/-/models-0.16.0.tgz"
+  integrity sha512-ao2LEFJM4gUt5fV/EexFqBBhsO14il1rmqeavRKudD//T162lhrOqvXnE5p+BJIZLhrvoT4zs+Saa1CGDjZwOg==
+  dependencies:
+    "@stacks/stacks-blockchain-api-types" "7.8.2"
+    bignumber.js "9.1.2"
+    zod "3.23.6"
+
+"@leather.io/rpc@^2.1.9":
+  version "2.1.9"
+  resolved "https://registry.npmjs.org/@leather.io/rpc/-/rpc-2.1.9.tgz"
+  integrity sha512-diLDqf8O9D2CG/zZBFaGvt4AApZwY6/l0fWDC7a6bSfKcLcJftD4tzOrIjBeNKDtz79IGnNUR1cOV6EGh6xJzQ==
+  dependencies:
+    "@leather.io/models" "0.16.0"
+    zod "3.23.6"
+
 "@micro-stacks/client@^1.2.1", "@micro-stacks/client@1.2.1":
   version "1.2.1"
   resolved "https://registry.npmjs.org/@micro-stacks/client/-/client-1.2.1.tgz"
@@ -107,6 +124,11 @@
   version "14.2.6"
   resolved "https://registry.npmjs.org/@next/swc-linux-x64-gnu/-/swc-linux-x64-gnu-14.2.6.tgz"
   integrity sha512-InosKxw8UMcA/wEib5n2QttwHSKHZHNSbGcMepBM0CTcNwpxWzX32KETmwbhKod3zrS8n1vJ+DuJKbL9ZAB0Ag==
+
+"@next/swc-linux-x64-musl@14.2.6":
+  version "14.2.6"
+  resolved "https://registry.npmjs.org/@next/swc-linux-x64-musl/-/swc-linux-x64-musl-14.2.6.tgz"
+  integrity sha512-d4QXfJmt5pGJ7cG8qwxKSBnO5AXuKAFYxV7qyDRHnUNvY/dgDh+oX292gATpB2AAHgjdHd5ks1wXxIEj6muLUQ==
 
 "@noble/hashes@^1.1.2", "@noble/hashes@~1.1.1", "@noble/hashes@1.1.5":
   version "1.1.5"
@@ -488,7 +510,7 @@
     ripemd160-min "^0.0.6"
     varuint-bitcoin "^1.1.2"
 
-"@stacks/network@^6.1.1", "@stacks/network@^6.16.0":
+"@stacks/network@^6.1.1", "@stacks/network@^6.11.3", "@stacks/network@^6.16.0":
   version "6.16.0"
   resolved "https://registry.npmjs.org/@stacks/network/-/network-6.16.0.tgz"
   integrity sha512-uqz9Nb6uf+SeyCKENJN+idt51HAfEeggQKrOMfGjpAeFgZV2CR66soB/ci9+OVQR/SURvasncAz2ScI1blfS8A==
@@ -508,7 +530,12 @@
     schema-inspector "^2.0.2"
     zone-file "^2.0.0-beta.3"
 
-"@stacks/transactions@^6.1.1", "@stacks/transactions@^6.16.1":
+"@stacks/stacks-blockchain-api-types@7.8.2":
+  version "7.8.2"
+  resolved "https://registry.npmjs.org/@stacks/stacks-blockchain-api-types/-/stacks-blockchain-api-types-7.8.2.tgz"
+  integrity sha512-wcDSdgIZx/ttQfUTPtGJOIyEkTOjmCsC79TaIyxTIiihSgrGppqTuzkwHD/DyuQkcJtUZvDTxMsAXkBKShE1kw==
+
+"@stacks/transactions@^6.1.1", "@stacks/transactions@^6.12.0", "@stacks/transactions@^6.16.1":
   version "6.16.1"
   resolved "https://registry.npmjs.org/@stacks/transactions/-/transactions-6.16.1.tgz"
   integrity sha512-yCtUM+8IN0QJbnnlFhY1wBW7Q30Cxje3Zmy8DgqdBoM/EPPWadez/8wNWFANVAMyUZeQ9V/FY+8MAw4E+pCReA==
@@ -545,6 +572,13 @@
   dependencies:
     "@types/node" "*"
 
+"@types/cors@^2.8.17":
+  version "2.8.17"
+  resolved "https://registry.npmjs.org/@types/cors/-/cors-2.8.17.tgz"
+  integrity sha512-8CGDvrBj1zgo2qE+oS3pOCyYNqCPryMWY2bGfwA0dcfopWGgxs+78df0Rs3rc9THP4JkOhLsAa+15VdpAqkcUA==
+  dependencies:
+    "@types/node" "*"
+
 "@types/node@*", "@types/node@^20":
   version "20.14.12"
   resolved "https://registry.npmjs.org/@types/node/-/node-20.14.12.tgz"
@@ -578,6 +612,14 @@
   dependencies:
     "@types/prop-types" "*"
     csstype "^3.0.2"
+
+"@velarprotocol/velar-sdk@^0.6.7":
+  version "0.6.7"
+  resolved "https://registry.npmjs.org/@velarprotocol/velar-sdk/-/velar-sdk-0.6.7.tgz"
+  integrity sha512-NAYTh/QTGEExPJ+okA/wdDXu7+14qqWYxdJG+42cS/VJC92Kdwvvm0HjMNz2qaYrTHJeGq9kEHAubDksFZhMlw==
+  dependencies:
+    "@stacks/network" "^6.11.3"
+    "@stacks/transactions" "^6.12.0"
 
 ansi-regex@^5.0.1:
   version "5.0.1"
@@ -647,6 +689,11 @@ base64-js@^1.5.1:
   version "1.5.1"
   resolved "https://registry.npmjs.org/base64-js/-/base64-js-1.5.1.tgz"
   integrity sha512-AKpaYlHn8t4SVbOHCy+b5+KKgvR4vrsD8vbvrbiQJps7fKDTkjkDry6ji0rUJjC0kzbNePLwzxq8iypo41qeWA==
+
+bignumber.js@9.1.2:
+  version "9.1.2"
+  resolved "https://registry.npmjs.org/bignumber.js/-/bignumber.js-9.1.2.tgz"
+  integrity sha512-2/mKyZH9K85bzOEfhXDBFZTGd1CTs+5IHpeFQo9luiBG7hghdC851Pj2WAhb6E3R6b9tZj/XKhbg4fum+Kepug==
 
 binary-extensions@^2.0.0:
   version "2.3.0"
@@ -752,6 +799,14 @@ commander@^4.0.0:
   version "4.1.1"
   resolved "https://registry.npmjs.org/commander/-/commander-4.1.1.tgz"
   integrity sha512-NOKm8xhkzAjzFx8B2v5OAHT+u5pRQc2UCa2Vq9jYL/31o2wi9mxBA7LIFs3sV5VSC49z6pEhfbMULvShKj26WA==
+
+cors@^2.8.5:
+  version "2.8.5"
+  resolved "https://registry.npmjs.org/cors/-/cors-2.8.5.tgz"
+  integrity sha512-KIHbLJqu73RGr/hnbrO9uBeixNGuvSQjul/jdFvS/KFSIH1hWVd1ng7zOHx+YrEfInLG7q4n6GHQ9cDtxv/P6g==
+  dependencies:
+    object-assign "^4"
+    vary "^1"
 
 cross-fetch@^3.1.5:
   version "3.1.8"
@@ -1102,7 +1157,7 @@ normalize-path@^3.0.0, normalize-path@~3.0.0:
   resolved "https://registry.npmjs.org/normalize-path/-/normalize-path-3.0.0.tgz"
   integrity sha512-6eZs5Ls3WtCisHWp9S2GUy8dqkpGi4BVSz3GaqiE6ezub0512ESztXUwUB6C6IKbQkY2Pnb/mD4WYojCRwcwLA==
 
-object-assign@^4.0.1:
+object-assign@^4, object-assign@^4.0.1:
   version "4.1.1"
   resolved "https://registry.npmjs.org/object-assign/-/object-assign-4.1.1.tgz"
   integrity sha512-rJgTQnkUnH1sFw8yT6VSU3zD3sWmu6sZhIseY8VX+GRu3P6F7Fu+JNDoXfklElbLJSnc3FUQHVe4cU5hj+BcUg==
@@ -1560,6 +1615,11 @@ varuint-bitcoin@^1.1.2:
   dependencies:
     safe-buffer "^5.1.1"
 
+vary@^1:
+  version "1.1.2"
+  resolved "https://registry.npmjs.org/vary/-/vary-1.1.2.tgz"
+  integrity sha512-BNGbWLfd0eUPabhkXUVm0j8uuvREyTh5ovRa/dyow/BqAbZJyC+5fU+IzQOzmAKzYqYRAISoRhdQr3eIZ/PXqg==
+
 webidl-conversions@^3.0.0:
   version "3.0.1"
   resolved "https://registry.npmjs.org/webidl-conversions/-/webidl-conversions-3.0.1.tgz"
@@ -1602,6 +1662,11 @@ yaml@^2.3.4:
   version "2.4.5"
   resolved "https://registry.npmjs.org/yaml/-/yaml-2.4.5.tgz"
   integrity sha512-aBx2bnqDzVOyNKfsysjA2ms5ZlnjSAW2eG3/L5G/CSujfjLJTJsEw1bGw8kCf04KodQWk1pxlGnZ56CRxiawmg==
+
+zod@3.23.6:
+  version "3.23.6"
+  resolved "https://registry.npmjs.org/zod/-/zod-3.23.6.tgz"
+  integrity sha512-RTHJlZhsRbuA8Hmp/iNL7jnfc4nZishjsanDAfEY1QpDQZCahUp3xDzl+zfweE9BklxMUcgBgS1b7Lvie/ZVwA==
 
 zone-file@^2.0.0-beta.3:
   version "2.0.0-beta.3"
