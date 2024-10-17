@@ -2,6 +2,7 @@
 
 import { Stake } from "@/components/stake";
 
+
 const Page = () => {
         return <Stake />
 }
