@@ -1,0 +1,13 @@
+{
+  "name": "stablebridge",
+  "version": "1.0.0",
+  "description": "## Introduction",
+  "main": "tokens.js",
+  "scripts": {
+    "install" : "cd contracts && npm i",
+    "install2": "cd frontend && npm i"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
