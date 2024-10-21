@@ -30,10 +30,9 @@ export function Swap() {
     getData()
   }, []);
 
-
   useEffect(() => {
     function getData() {
-      fetch("https://api.velar.co/tickers", {
+      fetch("https://api.velar.co/tokens/?symbol=all", {
         method: "GET"
       })
         .then(response => response.json())
@@ -46,10 +45,6 @@ export function Swap() {
     }
     getData()
   }, []);
-
-  console.log(velarTokens)
-
-
 
   const handleFromTokenSelect = (token) => {
     setSelectedFromToken(token)
@@ -88,7 +83,7 @@ export function Swap() {
           {/* From Dropdown */}
           <div className="relative mb-4">
             <div 
-              className="bg-[#2D2D2D] p-3 rounded-lg cursor-pointer flex justify-between items-center"
+              className="bg-[#2D2D2D] p-3 rounded-lg cursor-pointer flex justify-between items-center transition-shadow duration-200 hover:shadow-lg"
               onClick={toggleFromDropdown}
             >
               {selectedFromToken ? (
@@ -97,12 +92,12 @@ export function Swap() {
                   <span>{selectedFromToken.name}</span>
                 </div>
               ) : (
-                <span className="text-white">Select a token</span>
+                <span className="text-gray-400">Select a token</span>
               )}
               <ChevronDownIcon className="w-5 h-5" />
             </div>
             {isFromDropdownOpen && (
-              <div className="absolute z-10 mt-2 w-full bg-[#2D2D2D] rounded-lg shadow-lg max-h-60 overflow-y-auto">
+              <div className="absolute z-10 mt-2 w-full bg-[#2D2D2D] rounded-lg shadow-lg max-h-60 overflow-y-auto border border-[#3D3D3D]">
                 {tokens.map((token) => (
                   <div
                     key={`from-${token.symbol}`}
@@ -120,7 +115,7 @@ export function Swap() {
           <input
             type="number"
             placeholder="0.0000"
-            className="bg-transparent text-white w-full p-3 rounded-lg mb-4 border border-[#3D3D3D]"
+            className="bg-transparent text-white w-full p-3 rounded-lg mb-4 border border-[#3D3D3D] focus:outline-none focus:ring-2 focus:ring-[#9B51E0]"
           />
 
           {/* Arrow icon */}
@@ -131,7 +126,7 @@ export function Swap() {
           {/* To Dropdown */}
           <div className="relative mb-4">
             <div 
-              className="bg-[#2D2D2D] p-3 rounded-lg cursor-pointer flex justify-between items-center"
+              className="bg-[#2D2D2D] p-3 rounded-lg cursor-pointer flex justify-between items-center transition-shadow duration-200 hover:shadow-lg"
               onClick={toggleToDropdown}
             >
               {selectedToToken ? (
@@ -140,12 +135,12 @@ export function Swap() {
                   <span>{selectedToToken.name}</span>
                 </div>
               ) : (
-                <span className="text-white">Select a token</span>
+                <span className="text-gray-400">Select a token</span>
               )}
               <ChevronDownIcon className="w-5 h-5" />
             </div>
             {isToDropdownOpen && (
-              <div className="absolute z-10 mt-2 w-full bg-[#2D2D2D] rounded-lg shadow-lg max-h-60 overflow-y-auto">
+              <div className="absolute z-10 mt-2 w-full bg-[#2D2D2D] rounded-lg shadow-lg max-h-60 overflow-y-auto border border-[#3D3D3D]">
                 {tokens.map((token) => (
                   <div
                     key={`to-${token.symbol}`}
@@ -163,11 +158,11 @@ export function Swap() {
           <input
             type="number"
             placeholder="0.0000"
-            className="bg-transparent text-white w-full p-3 rounded-lg mb-4 border border-[#3D3D3D]"
+            className="bg-transparent text-white w-full p-3 rounded-lg mb-4 border border-[#3D3D3D] focus:outline-none focus:ring-2 focus:ring-[#9B51E0]"
           />
 
           <Button 
-            className="w-full bg-[#9B51E0] text-white font-medium py-2 px-4 rounded-lg hover:bg-[#8A46C7]" 
+            className="w-full bg-[#9B51E0] text-white font-medium py-2 px-4 rounded-lg hover:bg-[#8A46C7] transition-colors duration-200" 
             onClick={() => console.log('Swap action')}
           >
             {userData ? `Swap ${selectedFromToken ? selectedFromToken.symbol : 'Tokens'}` : 'Connect Wallet'}
