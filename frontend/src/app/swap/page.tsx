@@ -1,9 +1,9 @@
 "use client";
 
-import { Swap } from "@/components/swap";
+import { SwapComponent } from "@/components/swap";
 
 const Page = () => {
-        return <Swap />
+        return <SwapComponent />
 }
 
 export default Page;
