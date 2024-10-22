@@ -43,10 +43,13 @@ export function SwapComponent() {
   const [error, setError] = React.useState<string | null>(null)
 
   React.useEffect(() => {
-    fetch("/api/tokens")
+    
+    const  fetchTokens = async () => {
+      await fetch("/api/tokens")
       .then(response => response.json())
       .then(data => {
-        setTokens(data.results || [])
+        console.log(data)
+        setTokens(data || [])
         setIsLoading(false)
       })
       .catch(error => {
@@ -54,6 +57,8 @@ export function SwapComponent() {
         setError('Failed to fetch tokens. Please try again later.')
         setIsLoading(false)
       })
+    }
+    fetchTokens()
   }, [])
 
   if (isLoading) {
