@@ -25,11 +25,13 @@ export function SwapComponent() {
 
   React.useEffect(() => {
     // Fetch tokens from API
-    fetch("https://api.hiro.so/metadata/v1/ft?address=SP3K8BC0PPEVCV7NZ6QSRWPQ2JE9E5B6N3PA0KBR9&offset=0&limit=20&order_by=name&order=asc")
+    fetch("/api/tokens")
       .then(response => response.json())
       .then(data => setTokens(data.results))
       .catch(error => console.error('Error fetching tokens:', error))
   }, [])
+
+  console.log(tokens)
 
   return (
     <div className="flex flex-col items-center justify-start min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 text-white p-4">
