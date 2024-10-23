@@ -11,7 +11,7 @@ export async function GET(req: NextRequest) {
     }
 
     const data = await response.json();
-    console.log(data); // Log the fetched data
+   // console.log(data); // Log the fetched data
 
     // Create a new response with the data
     const res = NextResponse.json(data);
