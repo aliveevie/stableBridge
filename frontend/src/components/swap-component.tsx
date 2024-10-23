@@ -19,6 +19,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import { UserContext } from "./userContext"
 
 interface Token {
   symbol: string;
@@ -41,22 +42,22 @@ export function SwapComponent() {
   const [selectedToToken, setSelectedToToken] = React.useState<Token | null>(null)
   const [isLoading, setIsLoading] = React.useState(true)
   const [error, setError] = React.useState<string | null>(null)
+  const { userData } = React.useContext(UserContext)
+
+  console.log(userData)
 
   React.useEffect(() => {
-    
-    const  fetchTokens = async () => {
-      await fetch("/api/tokens")
-      .then(response => response.json())
-      .then(data => {
-        console.log(data)
+    const fetchTokens = async () => {
+      try {
+        const response = await fetch("/api/tokens")
+        const data = await response.json()
         setTokens(data || [])
-        setIsLoading(false)
-      })
-      .catch(error => {
+      } catch (error) {
         console.error('Error fetching tokens:', error)
         setError('Failed to fetch tokens. Please try again later.')
+      } finally {
         setIsLoading(false)
-      })
+      }
     }
     fetchTokens()
   }, [])
@@ -81,12 +82,14 @@ export function SwapComponent() {
           <div className="space-y-4">
             <div className="flex justify-between items-center">
               <span className="text-sm font-medium text-gray-400">From</span>
-              <span className="text-sm font-medium text-green-400">Connected</span>
+              <span className={`text-sm font-medium ${userData ? 'text-green-400' : 'text-red-400'}`}>
+                {userData ? 'Connected' : 'Disconnected'}
+              </span>
             </div>
 
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="outline" className="w-full justify-between bg-gray-800 hover:bg-gray-700 text-white border-gray-700">
+                <Button variant="outline" className="w-full justify-between bg-gray-800 hover:bg-gray-700 text-white border-gray-700" disabled={!userData}>
                   {selectedFromToken ? (
                     <div className="flex items-center">
                       <img src={selectedFromToken.imageUrl} alt={selectedFromToken.name} className="w-6 h-6 mr-2 rounded-full" />
@@ -121,6 +124,7 @@ export function SwapComponent() {
               type="number"
               placeholder="0.0000"
               className="bg-gray-800 text-white border-gray-700 focus:ring-2 focus:ring-blue-500"
+              disabled={!userData}
             />
 
             <div className="flex justify-center">
@@ -135,7 +139,7 @@ export function SwapComponent() {
 
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="outline" className="w-full justify-between bg-gray-800 hover:bg-gray-700 text-white border-gray-700">
+                <Button variant="outline" className="w-full justify-between bg-gray-800 hover:bg-gray-700 text-white border-gray-700" disabled={!userData}>
                   {selectedToToken ? (
                     <div className="flex items-center">
                       <img src={selectedToToken.imageUrl} alt={selectedToToken.name} className="w-6 h-6 mr-2 rounded-full" />
@@ -170,12 +174,18 @@ export function SwapComponent() {
               type="number"
               placeholder="0.0000"
               className="bg-gray-800 text-white border-gray-700 focus:ring-2 focus:ring-blue-500"
+              disabled={!userData}
             />
 
-            <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 rounded-lg transition-colors duration-200">
-              {selectedFromToken && selectedToToken
-                ? `Swap ${selectedFromToken.symbol} to ${selectedToToken.symbol}`
-                : 'Select tokens to swap'}
+            <Button 
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 rounded-lg transition-colors duration-200"
+              disabled={!userData}
+            >
+              {!userData
+                ? 'Connect Wallet to Swap'
+                : selectedFromToken && selectedToToken
+                  ? `Swap ${selectedFromToken.symbol} to ${selectedToToken.symbol}`
+                  : 'Select tokens to swap'}
             </Button>
           </div>
 
