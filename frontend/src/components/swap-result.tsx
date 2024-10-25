@@ -16,7 +16,7 @@ const SwapResult = () => {
   useEffect(() => {
     const initializeTokens = async () => {
       try {
-        const { VELAR, STX } = await getTokens()
+        const { VELAR:, STX } = await getTokens()
         setInToken(VELAR)
         setOutToken(STX)
       } catch (err) {
