@@ -1,6 +1,4 @@
 "use client";
-
-
 import SwapResult from "@/components/swap-result";
 
 const Page = () => {
