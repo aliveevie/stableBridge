@@ -37,38 +37,9 @@ interface Token {
 }
 
 export function SwapComponent() {
-  const [tokens, setTokens] = React.useState<Token[]>([])
   const [selectedFromToken, setSelectedFromToken] = React.useState<Token | null>(null)
   const [selectedToToken, setSelectedToToken] = React.useState<Token | null>(null)
-  const [isLoading, setIsLoading] = React.useState(true)
-  const [error, setError] = React.useState<string | null>(null)
-  const { userData } = React.useContext(UserContext)
-
-  console.log(userData)
-
-  React.useEffect(() => {
-    const fetchTokens = async () => {
-      try {
-        const response = await fetch("/api/tokens")
-        const data = await response.json()
-        setTokens(data || [])
-      } catch (error) {
-        console.error('Error fetching tokens:', error)
-        setError('Failed to fetch tokens. Please try again later.')
-      } finally {
-        setIsLoading(false)
-      }
-    }
-    fetchTokens()
-  }, [])
-
-  if (isLoading) {
-    return <div className="flex justify-center items-center min-h-screen">Loading...</div>
-  }
-
-  if (error) {
-    return <div className="flex justify-center items-center min-h-screen text-red-500">{error}</div>
-  }
+  const { userData, tokens } = React.useContext(UserContext)
 
   return (
     <div className="flex flex-col items-center justify-start min-h-screen bg-gradient-to-b from-gray-900 to-gray-800 text-white p-4">
@@ -103,7 +74,7 @@ export function SwapComponent() {
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-[300px] max-h-[300px] overflow-y-auto bg-gray-800 border border-gray-700">
                 {tokens && tokens.length > 0 ? (
-                  tokens.map((token) => (
+                  tokens.map((token: Token) => (
                     <DropdownMenuItem
                       key={token.symbol}
                       onSelect={() => setSelectedFromToken(token)}
@@ -153,7 +124,7 @@ export function SwapComponent() {
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-[300px] max-h-[300px] overflow-y-auto bg-gray-800 border border-gray-700">
                 {tokens && tokens.length > 0 ? (
-                  tokens.map((token) => (
+                  tokens.map((token: Token) => (
                     <DropdownMenuItem
                       key={token.symbol}
                       onSelect={() => setSelectedToToken(token)}
@@ -225,7 +196,7 @@ export function SwapComponent() {
               </TableHeader>
               <TableBody>
                 {tokens && tokens.length > 0 ? (
-                  tokens.map((token) => (
+                  tokens.map((token: Token) => (
                     <TableRow key={token.symbol}>
                       <TableCell className="font-medium">
                         <div className="flex items-center">
