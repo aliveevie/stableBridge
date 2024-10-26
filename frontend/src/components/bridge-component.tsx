@@ -41,13 +41,16 @@ export function Bridge() {
   const [slippage, setSlippage] = useState<number>(0.5)
   const [isAdvancedMode, setIsAdvancedMode] = useState<boolean>(false)
 
+  const isConnected = !!userData
+  const hasTokens = tokens && tokens.length > 0
+
   const handleNetworkSwap = () => {
     setFromNetwork(toNetwork)
     setToNetwork(fromNetwork)
   }
 
   const handleBridge = () => {
-    if (!userData) {
+    if (!isConnected) {
       toast({
         title: "Wallet not connected",
         description: "Please connect your wallet to proceed with the bridge.",
@@ -73,27 +76,31 @@ export function Bridge() {
   }
 
   return (
-    <div className="flex min-h-screen w-full flex-col items-center justify-center bg-gradient-to-br from-[#1E293B] to-[#0F172A] px-4 py-12 md:px-6 lg:py-24">
-      <Card className="w-full max-w-2xl">
+    <div className="flex min-h-screen w-full flex-col items-center justify-center bg-gradient-to-br from-gray-900 to-gray-800 px-4 py-12 md:px-6 lg:py-24">
+      <Card className="w-full max-w-md bg-gray-800 text-white">
         <CardHeader>
-          <CardTitle className="text-3xl font-bold">Stacks Bridge</CardTitle>
-          <CardDescription>Transfer assets across networks in the Stacks ecosystem</CardDescription>
+          <CardTitle className="text-2xl font-bold">Stacks Bridge</CardTitle>
+          <CardDescription className="text-gray-400">Transfer assets across networks in the Stacks ecosystem</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
           <div className="flex items-center justify-between">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="outline" className="w-[200px]">
+                <Button variant="outline" className="w-[120px] bg-gray-700 text-white border-gray-600" disabled={!isConnected}>
                   {fromNetwork.icon}
                   <span className="ml-2">{fromNetwork.name}</span>
                   <ChevronDownIcon className="ml-auto h-4 w-4" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="start" className="w-[200px]">
-                <DropdownMenuLabel>Select Network</DropdownMenuLabel>
-                <DropdownMenuSeparator />
+              <DropdownMenuContent className="w-[120px] bg-gray-700 border-gray-600">
+                <DropdownMenuLabel className="text-gray-400">Networks</DropdownMenuLabel>
+                <DropdownMenuSeparator className="bg-gray-600" />
                 {networks.map((network) => (
-                  <DropdownMenuItem key={network.id} onSelect={() => setFromNetwork(network)}>
+                  <DropdownMenuItem
+                    key={network.id}
+                    onSelect={() => setFromNetwork(network)}
+                    className="text-white hover:bg-gray-600"
+                  >
                     <div className="flex items-center">
                       {network.icon}
                       <span className="ml-2">{network.name}</span>
@@ -102,22 +109,26 @@ export function Bridge() {
                 ))}
               </DropdownMenuContent>
             </DropdownMenu>
-            <Button variant="ghost" size="icon" onClick={handleNetworkSwap}>
+            <Button variant="ghost" size="icon" onClick={handleNetworkSwap} className="text-white" disabled={!isConnected}>
               <ArrowRightIcon className="h-4 w-4" />
             </Button>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="outline" className="w-[200px]">
+                <Button variant="outline" className="w-[120px] bg-gray-700 text-white border-gray-600" disabled={!isConnected}>
                   {toNetwork.icon}
                   <span className="ml-2">{toNetwork.name}</span>
                   <ChevronDownIcon className="ml-auto h-4 w-4" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-[200px]">
-                <DropdownMenuLabel>Select Network</DropdownMenuLabel>
-                <DropdownMenuSeparator />
+              <DropdownMenuContent className="w-[120px] bg-gray-700 border-gray-600">
+                <DropdownMenuLabel className="text-gray-400">Networks</DropdownMenuLabel>
+                <DropdownMenuSeparator className="bg-gray-600" />
                 {networks.map((network) => (
-                  <DropdownMenuItem key={network.id} onSelect={() => setToNetwork(network)}>
+                  <DropdownMenuItem
+                    key={network.id}
+                    onSelect={() => setToNetwork(network)}
+                    className="text-white hover:bg-gray-600"
+                  >
                     <div className="flex items-center">
                       {network.icon}
                       <span className="ml-2">{network.name}</span>
@@ -128,10 +139,10 @@ export function Bridge() {
             </DropdownMenu>
           </div>
           <div className="space-y-2">
-            <Label htmlFor="token">Select Token</Label>
+            <Label htmlFor="token" className="text-white">Select Token</Label>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="outline" className="w-full justify-start">
+                <Button variant="outline" className="w-full justify-start bg-gray-700 text-white border-gray-600" disabled={!isConnected || !hasTokens}>
                   {selectedToken ? (
                     <>
                       <img src={selectedToken.imageUrl} alt={selectedToken.name} className="w-6 h-6 mr-2 rounded-full" />
@@ -139,17 +150,21 @@ export function Bridge() {
                       <span className="ml-auto">{selectedToken.symbol}</span>
                     </>
                   ) : (
-                    <span>Select a token</span>
+                    <span>{isConnected ? (hasTokens ? "Select a token" : "No tokens available") : "Connect wallet to select token"}</span>
                   )}
                   <ChevronDownIcon className="ml-2 h-4 w-4" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-[300px]">
-                <DropdownMenuLabel>Select Token</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                {tokens && tokens.length > 0 ? (
+              <DropdownMenuContent className="w-full max-h-[300px] overflow-y-auto bg-gray-700 border-gray-600">
+                <DropdownMenuLabel className="text-gray-400">Select Token</DropdownMenuLabel>
+                <DropdownMenuSeparator className="bg-gray-600" />
+                {hasTokens ? (
                   tokens.map((token: Token) => (
-                    <DropdownMenuItem key={token.symbol} onSelect={() => setSelectedToken(token)}>
+                    <DropdownMenuItem
+                      key={token.symbol}
+                      onSelect={() => setSelectedToken(token)}
+                      className="text-white hover:bg-gray-600"
+                    >
                       <div className="flex w-full items-center justify-between">
                         <div className="flex items-center">
                           <img src={token.imageUrl} alt={token.name} className="w-6 h-6 mr-2 rounded-full" />
@@ -160,18 +175,20 @@ export function Bridge() {
                     </DropdownMenuItem>
                   ))
                 ) : (
-                  <DropdownMenuItem disabled>No tokens available</DropdownMenuItem>
+                  <DropdownMenuItem disabled className="text-gray-500">No tokens available</DropdownMenuItem>
                 )}
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
           <div className="space-y-2">
-            <Label htmlFor="amount">Amount</Label>
+            <Label htmlFor="amount" className="text-white">Amount</Label>
             <Input
               id="amount"
               placeholder="0.00"
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
+              className="bg-gray-700 text-white border-gray-600"
+              disabled={!isConnected || !selectedToken}
             />
           </div>
           <div className="flex items-center space-x-2">
@@ -179,12 +196,13 @@ export function Bridge() {
               id="advanced-mode"
               checked={isAdvancedMode}
               onCheckedChange={setIsAdvancedMode}
+              disabled={!isConnected}
             />
-            <Label htmlFor="advanced-mode">Advanced Mode</Label>
+            <Label htmlFor="advanced-mode" className="text-white">Advanced Mode</Label>
           </div>
           {isAdvancedMode && (
             <div className="space-y-2">
-              <Label htmlFor="slippage">Slippage Tolerance: {slippage}%</Label>
+              <Label htmlFor="slippage" className="text-white">Slippage Tolerance: {slippage}%</Label>
               <Slider
                 id="slippage"
                 min={0.1}
@@ -192,13 +210,19 @@ export function Bridge() {
                 step={0.1}
                 value={[slippage]}
                 onValueChange={(value) => setSlippage(value[0])}
+                className="bg-gray-700"
+                disabled={!isConnected}
               />
             </div>
           )}
         </CardContent>
         <CardFooter>
-          <Button className="w-full" onClick={handleBridge}>
-            Bridge Assets
+          <Button 
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white" 
+            onClick={handleBridge}
+            disabled={!isConnected || !selectedToken || !amount}
+          >
+            {isConnected ? "Bridge Assets" : "Connect Wallet to Bridge"}
           </Button>
         </CardFooter>
       </Card>
