@@ -1,8 +1,9 @@
+"use client";
+
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuItem } from "@/components/ui/dropdown-menu"
 import { Button } from "@/components/ui/button"
 import { Card } from "@/components/ui/card"
 import { JSX, SVGProps } from "react"
-
 
 export function Bridge() {
   return (
