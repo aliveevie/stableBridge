@@ -61,31 +61,29 @@ export function Pool() {
   }
 
   return (
-    <div className="flex flex-col min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 text-white">
-      <main className="flex-1 p-4 md:p-10 grid gap-8">
+    <div className="flex flex-col min-h-screen bg-[#0f172a] text-white">
+      <main className="flex-1 p-6 space-y-8">
         <section>
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-2xl font-bold">Available Pools</h2>
-            <Button variant="outline">{userData ? "Connected" : "Connect Wallet"}</Button>
-          </div>
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          <h2 className="text-3xl font-bold mb-6">Available Pools</h2>
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
             {pools.map((pool) => (
-              <Card key={pool.id} className="bg-gray-800 border-gray-700">
+              <Card key={pool.id} className="bg-[#1e293b] border-gray-700">
                 <CardHeader>
-                  <CardTitle className="flex items-center justify-between">
-                    <span>{pool.name}</span>
-                    <div className="flex items-center gap-1 text-sm text-green-400">
-                      <PercentIcon className="w-4 h-4" />
-                      <span>{pool.apy}% APY</span>
-                    </div>
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="grid gap-4">
-                  <div className="flex items-center justify-between">
-                    <span className="text-gray-400">Total Value Locked</span>
-                    <span>${(pool.tvl / 1000000).toFixed(1)}M</span>
+                  <CardTitle className="text-xl font-bold text-white">{pool.name}</CardTitle>
+                  <div className="flex items-center text-green-400">
+                    <PercentIcon className="w-4 h-4 mr-1" />
+                    <span>{pool.apy}% APY</span>
                   </div>
-                  <Button size="sm" onClick={() => setSelectedPool(pool)}>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="flex justify-between items-center">
+                    <span className="text-gray-400">Total Value Locked</span>
+                    <span className="font-medium text-white">${(pool.tvl / 1000000).toFixed(1)}M</span>
+                  </div>
+                  <Button 
+                    className="w-full bg-blue-500 hover:bg-blue-600" 
+                    onClick={() => setSelectedPool(pool)}
+                  >
                     Stake
                   </Button>
                 </CardContent>
@@ -94,58 +92,61 @@ export function Pool() {
           </div>
         </section>
         {selectedPool && (
-          <Card className="bg-gray-800 border-gray-700">
+          <Card className="bg-[#1e293b] border-gray-700">
             <CardHeader>
-              <CardTitle>Stake in {selectedPool.name} Pool</CardTitle>
+              <CardTitle className="text-2xl font-bold">Stake in {selectedPool.name} Pool</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="grid gap-4">
-                <div className="grid gap-2">
+              <div className="space-y-4">
+                <div className="space-y-2">
                   <Label htmlFor="stake-amount">Stake Amount</Label>
                   <Input
                     id="stake-amount"
                     placeholder="0.00"
                     value={stakeAmount}
                     onChange={(e) => setStakeAmount(e.target.value)}
-                    className="bg-gray-700 border-gray-600 text-white"
+                    className="bg-[#2d3748] border-gray-600 text-white"
                   />
                 </div>
-                <Button onClick={() => handleStake(selectedPool)}>Confirm Stake</Button>
+                <Button 
+                  className="w-full bg-blue-500 hover:bg-blue-600"
+                  onClick={() => handleStake(selectedPool)}
+                >
+                  Confirm Stake
+                </Button>
               </div>
             </CardContent>
           </Card>
         )}
         <section>
-          <h2 className="text-2xl font-bold mb-4">Your Staked Tokens</h2>
-          <Card className="bg-gray-800 border-gray-700">
+          <h2 className="text-3xl font-bold mb-6">Your Staked Tokens</h2>
+          <Card className="bg-[#1e293b] border-gray-700">
             <CardContent className="p-6">
               <Tabs defaultValue="overview" className="w-full">
-                <TabsList className="grid w-full grid-cols-2 bg-gray-700">
+                <TabsList className="grid w-full grid-cols-2 bg-[#2d3748]">
                   <TabsTrigger value="overview">Overview</TabsTrigger>
                   <TabsTrigger value="details">Details</TabsTrigger>
                 </TabsList>
                 <TabsContent value="overview">
-                  <div className="grid gap-4 mt-4">
-                    <div className="flex items-center justify-between">
+                  <div className="space-y-4 mt-4">
+                    <div className="flex justify-between items-center">
                       <span className="text-gray-400">Total Staked</span>
                       <span className="font-medium">$5,234.56</span>
                     </div>
-                    <div className="flex items-center justify-between">
+                    <div className="flex justify-between items-center">
                       <span className="text-gray-400">Rewards Earned</span>
                       <span className="font-medium">$234.56</span>
                     </div>
-                    <div className="flex gap-2">
-                      <Button variant="outline" size="sm">
-                        Withdraw
-                      </Button>
-                      <Button size="sm">Claim Rewards</Button>
+                    <div className="flex space-x-4">
+                      <Button variant="outline" className="flex-1">Withdraw</Button>
+                      <Button className="flex-1 bg-blue-500 hover:bg-blue-600">Claim Rewards</Button>
                     </div>
                   </div>
                 </TabsContent>
                 <TabsContent value="details">
-                  <div className="grid gap-4 mt-4">
+                  <div className="space-y-4 mt-4">
                     {pools.map((pool) => (
-                      <div key={pool.id} className="flex items-center justify-between">
+                      <div key={pool.id} className="flex justify-between items-center">
                         <span>{pool.name}</span>
                         <span>$1,000.00</span>
                       </div>
@@ -157,19 +158,8 @@ export function Pool() {
           </Card>
         </section>
       </main>
-      <footer className="bg-gray-900 border-t border-gray-800 px-4 md:px-6 py-4 flex items-center justify-between text-sm text-gray-400">
-        <p>&copy; 2024 stableBridge. All rights reserved.</p>
-        <nav className="flex gap-4">
-          <Link href="#" className="hover:text-white transition-colors" prefetch={false}>
-            Terms
-          </Link>
-          <Link href="#" className="hover:text-white transition-colors" prefetch={false}>
-            Privacy
-          </Link>
-          <Link href="#" className="hover:text-white transition-colors" prefetch={false}>
-            Contact
-          </Link>
-        </nav>
+      <footer className="bg-[#1e293b] py-4 px-6 text-center text-sm text-gray-400">
+        <p>&copy; 2024 StableBridge. All rights reserved.</p>
       </footer>
     </div>
   )
