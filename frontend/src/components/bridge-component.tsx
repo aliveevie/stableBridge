@@ -41,7 +41,7 @@ export function Bridge() {
   const [slippage, setSlippage] = useState<number>(0.5)
   const [isAdvancedMode, setIsAdvancedMode] = useState<boolean>(false)
 
-  const isConnected = !!userData
+  const isConnected = !!userData && !!tokens && tokens.length > 0
   const hasTokens = tokens && tokens.length > 0
 
   const handleNetworkSwap = () => {
@@ -50,7 +50,7 @@ export function Bridge() {
   }
 
   const handleBridge = () => {
-    if (!isConnected) {
+    if (!userData || !isConnected) {
       toast({
         title: "Wallet not connected",
         description: "Please connect your wallet to proceed with the bridge.",
@@ -222,7 +222,7 @@ export function Bridge() {
             onClick={handleBridge}
             disabled={!isConnected || !selectedToken || !amount}
           >
-            {isConnected ? "Bridge Assets" : "Connect Wallet to Bridge"}
+            {!userData ? "Connect Wallet" : !isConnected ? "No Tokens Available" : "Bridge Assets"}
           </Button>
         </CardFooter>
       </Card>
