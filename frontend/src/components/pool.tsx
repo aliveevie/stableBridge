@@ -158,9 +158,6 @@ export function Pool() {
           </Card>
         </section>
       </main>
-      <footer className="bg-[#1e293b] py-4 px-6 text-center text-sm text-gray-400">
-        <p>&copy; 2024 StableBridge. All rights reserved.</p>
-      </footer>
     </div>
   )
 }
