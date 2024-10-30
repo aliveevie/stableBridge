@@ -90,7 +90,6 @@ export function Stake() {
   return (
     <div className="w-full bg-[#0f172a] min-h-screen p-6">
       <div className="max-w-4xl mx-auto">
-        <h1 className="text-3xl font-bold text-white mb-6">Stacks Ecosystem</h1>
         <div className="grid gap-6 md:grid-cols-2">
           <Card className="bg-[#1e293b] text-white border-gray-700">
             <CardHeader>
