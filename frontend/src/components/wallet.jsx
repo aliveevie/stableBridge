@@ -6,7 +6,7 @@ import { AppConfig, UserSession, showConnect } from "@stacks/connect";
 import { UserContext } from '@/components/userContext';
 
 export const WalletConnectButton = () => {
-  const { userData, setUserData } = useContext(UserContext);
+  const { userData, setUserData, tokens, setTokens } = useContext(UserContext);
   const [label, setLabel] = useState("Connect");
 
   const appConfig = new AppConfig(["store_write"]);
@@ -49,6 +49,7 @@ export const WalletConnectButton = () => {
     }
   }, [setUserData]);
 
+  
   return (
     <Button className="inline-flex"
       onClick={userData ? disconnectWallet : connectWallet}

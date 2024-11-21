@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(req: NextRequest) {
   try {
-    const response = await fetch("https://api.velar.co/tickers", {
+    const response = await fetch("https://api.velar.co/tokens/?symbol=all", {
       method: "GET"
     });
 
@@ -11,7 +11,7 @@ export async function GET(req: NextRequest) {
     }
 
     const data = await response.json();
-    console.log(data); // Log the fetched data
+   // console.log(data); // Log the fetched data
 
     // Create a new response with the data
     const res = NextResponse.json(data);
