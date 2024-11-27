@@ -263,7 +263,8 @@ export function BuySTX() {
                   Processing
                 </>
               ) : (
-                `Buy ${cryptos.find(c => c.id === selectedCrypto)?.symbol} with ${currencies.find(c => c.code === currency)?.symbol}`
+                `Buy ${cryptoAmount || '0'} ${cryptos.find(c => c.id === selectedCrypto)?.symbol || ''} ` +
+                `(${currencies.find(c => c.code === currency)?.symbol || ''}${convertedAmount || '0'} ${currency})`
               )}
             </Button>
           )}
