@@ -97,14 +97,17 @@ export function BuySTX() {
     fetchCurrencies()
   }, [])
 
-  // Add new useEffect to fetch cryptos
+  // Update the fetchCryptos useEffect
   useEffect(() => {
     const fetchCryptos = async () => {
       try {
+        // We'll specifically request these three cryptocurrencies
+        const cryptoIds = 'bitcoin,ethereum,stacks';
         const response = await fetch(
-          'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1'
+          `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=${cryptoIds}&order=market_cap_desc&per_page=3&page=1`
         )
         const data = await response.json()
+        
         const formattedCryptos = data.map((crypto: any) => ({
           id: crypto.id,
           symbol: crypto.symbol.toUpperCase(),
@@ -128,6 +131,7 @@ export function BuySTX() {
   // Update converted amount when crypto amount or currency changes
   useEffect(() => {
     if (cryptoAmount && currency && selectedCrypto) {
+      console.log(selectedCrypto)
       const selectedCurrency = currencies.find(c => c.code === currency)
       if (selectedCurrency && selectedCurrency.rate) {
         const fetchCryptoPrice = async () => {
@@ -135,6 +139,7 @@ export function BuySTX() {
             `https://api.coingecko.com/api/v3/simple/price?ids=${selectedCrypto}&vs_currencies=usd`
           )
           const data = await response.json()
+          console.log(data)
           const cryptoPriceInUSD = data[selectedCrypto]?.usd || 0
           const cryptoInUSD = parseFloat(cryptoAmount) * cryptoPriceInUSD
           const converted = cryptoInUSD * (selectedCurrency?.rate || 0)
