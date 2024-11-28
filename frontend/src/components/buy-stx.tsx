@@ -105,12 +105,18 @@ export function BuySTX() {
           `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1`
         )
         const data = await response.json()
-        const formattedCryptos = data.map((crypto: any) => ({
-          id: crypto.id,
-          symbol: crypto.symbol.toUpperCase(),
-          name: crypto.name,
-          image: crypto.image
-        }))
+        
+        // Filter only the ones we want (using blockstack as the correct ID for Stacks)
+        const wantedCryptos = ['bitcoin', 'ethereum', 'blockstack']
+        const formattedCryptos = data
+          .filter((crypto: any) => wantedCryptos.includes(crypto.id))
+          .map((crypto: any) => ({
+            id: crypto.id,
+            symbol: crypto.symbol.toUpperCase(),
+            name: crypto.name,
+            image: crypto.image
+          }))
+
         setCryptos(formattedCryptos)
         setSelectedCrypto(formattedCryptos[0]?.id || '')
       } catch (error) {
