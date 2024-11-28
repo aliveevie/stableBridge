@@ -101,13 +101,10 @@ export function BuySTX() {
   useEffect(() => {
     const fetchCryptos = async () => {
       try {
-        // We'll specifically request these three cryptocurrencies
-        const cryptoIds = 'bitcoin,ethereum,stacks';
         const response = await fetch(
-          `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=${cryptoIds}&order=market_cap_desc&per_page=3&page=1`
+          `https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1`
         )
         const data = await response.json()
-        
         const formattedCryptos = data.map((crypto: any) => ({
           id: crypto.id,
           symbol: crypto.symbol.toUpperCase(),
@@ -115,7 +112,7 @@ export function BuySTX() {
           image: crypto.image
         }))
         setCryptos(formattedCryptos)
-        setSelectedCrypto(formattedCryptos[0]?.id || '') // Set default crypto
+        setSelectedCrypto(formattedCryptos[0]?.id || '')
       } catch (error) {
         toast({
           title: "Error",
