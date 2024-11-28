@@ -4,17 +4,15 @@ import React, { useContext, useEffect, useState } from 'react';
 import { UserContext } from './userContext';
 
 const BuySTX = () => {
-  const { userData, tokens } = useContext(UserContext)
+  const { userData, tokens } = useContext(UserContext);
   const isConnected = !!userData && !!tokens && tokens.length > 0
   const [stxAmount, setStxAmount] = useState('');
   const [currency, setCurrency] = useState('USD');
-
-  
-
   const handleConnectWallet = () => {
     // Logic to connect wallet
-    
+
   };
+
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
