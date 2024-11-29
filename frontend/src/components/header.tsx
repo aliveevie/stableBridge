@@ -9,6 +9,7 @@ import { disconnect } from "@stacks/connect";
 import { WalletConnectButton } from "./wallet";
 import { WalletConnectMobile } from "./walletMobile";
 import { ClientProvider } from "@micro-stacks/react";
+import BuySTX from "./buySTX";
 
 type HeaderProps = {
   connectWallet: () => any; 
@@ -26,7 +27,7 @@ export function Header() {
   
   return (
      
-         <header className="sticky top-0 z-50 w-full shadow-sm">
+        <header className="sticky top-0 z-50 w-full shadow-sm">
         <div className="container flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
           <Link href="/" className="flex items-center gap-2" prefetch={false}>
             <SignpostIcon className="h-6 w-6 bg-gradient-to-r from-[#FF6B6B] via-[#FFA500] to-[#FFD700] bg-clip-text text-transparent" />
@@ -80,7 +81,7 @@ export function Header() {
                       </NavigationMenuLink>
                       <NavigationMenuLink asChild>
                         <Link
-                          href="pool"
+                          href="/pool"
                           className="group flex items-center justify-between rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50"
                           prefetch={false}
                         >
@@ -90,11 +91,21 @@ export function Header() {
                       </NavigationMenuLink>
                       <NavigationMenuLink asChild>
                         <Link
-                          href="stake"
+                          href="/stake"
                           className="group flex items-center justify-between rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50"
                           prefetch={false}
                         >
                           Stake
+                          <ArrowRightIcon className="h-4 w-4 opacity-0 transition-opacity group-hover:opacity-100" />
+                        </Link>
+                      </NavigationMenuLink>
+                      <NavigationMenuLink asChild>
+                        <Link
+                          href="/buySTX"
+                          className="group flex items-center justify-between rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50"
+                          prefetch={false}
+                        >
+                          Buy STX
                           <ArrowRightIcon className="h-4 w-4 opacity-0 transition-opacity group-hover:opacity-100" />
                         </Link>
                       </NavigationMenuLink>
