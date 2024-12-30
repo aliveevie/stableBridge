@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 
-const MintPage = () => {
+const Page = () => {
     const { userData, tokens } = useContext(UserContext);
     const [isMinting, setIsMinting] = useState(false);
     const { toast } = useToast();
@@ -29,9 +29,7 @@ const MintPage = () => {
         
         try {
             const functionArgs = [
-                standardPrincipalCV(
-                    userData.loadUserData().profile.stxAddress.testnet
-                ),
+                standardPrincipalCV(userData.profile.stxAddress.testnet)
             ];
 
             const options = {
@@ -87,8 +85,8 @@ const MintPage = () => {
                     </div>
                     {userData ? (
                         <p className="text-sm text-center mb-4">
-                            Connected: {userData.loadUserData().profile.stxAddress.testnet.slice(0, 6)}...
-                            {userData.loadUserData().profile.stxAddress.testnet.slice(-4)}
+                            Connected: {userData.profile.stxAddress.testnet.slice(0, 6)}...
+                            {userData.profile.stxAddress.testnet.slice(-4)}
                         </p>
                     ) : (
                         <p className="text-sm text-center mb-4">Not connected</p>
@@ -104,5 +102,5 @@ const MintPage = () => {
     );
 };
 
-export default MintPage;
+export default Page;
 
