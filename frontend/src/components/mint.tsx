@@ -7,6 +7,8 @@ import { STACKS_TESTNET } from "@stacks/network";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
+import stable from "../../public/hero-image.png"
+import Image from "next/image";
 
 const Page = () => {
     const { userData, tokens } = useContext(UserContext);
@@ -39,14 +41,14 @@ const Page = () => {
                 functionArgs,
                 network,
                 appDetails: {
-                    name: 'Fabulous Frogs',
+                    name: 'StableBridge NFT',
                     icon: 'https://assets.website-files.com/618b0aafa4afde65f2fe38fe/618b0aafa4afde2ae1fe3a1f_icon-isotipo.svg',
                 },
                 onFinish: (data: any) => {
                     console.log(data);
                     toast({
                         title: "Minting Successful",
-                        description: "Your Fabulous Frog NFT has been minted!",
+                        description: "Your StableBridge NFT has been minted!",
                     });
                 },
             };
@@ -72,14 +74,14 @@ const Page = () => {
         <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-green-400 to-blue-500">
             <Card className="w-[350px]">
                 <CardHeader>
-                    <CardTitle className="text-2xl font-bold">Fabulous Frogs Minter</CardTitle>
-                    <CardDescription>Mint your unique Fabulous Frog NFT!</CardDescription>
+                    <CardTitle className="text-2xl font-bold">StableBridge NFT</CardTitle>
+                    <CardDescription>Mint your unique StableBridge NFT!</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <div className="flex justify-center mb-6">
-                        <img 
-                            src="/placeholder.svg?height=200&width=200" 
-                            alt="Fabulous Frog NFT" 
+                        <Image 
+                            src={stable}
+                            alt="Stable NFT" 
                             className="rounded-lg shadow-lg"
                         />
                     </div>
