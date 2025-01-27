@@ -15,6 +15,10 @@
 (define-constant ERR_UNINTENDED_TAKER (err u2006))
 (define-constant ERR_ASSET_CONTRACT_NOT_WHITELISTED (err u2007))
 (define-constant ERR_PAYMENT_CONTRACT_NOT_WHITELISTED (err u2008))
+;; Define contract owner
+(define-constant contract-owner tx-sender)
+
+;; ... rest of your contract code ...
 
 ;; Define a map data structure for the asset listings
 (define-map listings
