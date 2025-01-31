@@ -1,19 +1,11 @@
 [project]
-name = 'contracts'
-description = ''
-authors = []
-telemetry = true
-cache_dir = './.cache'
+name = "contracts"
 requirements = []
-[contracts.stableBridge]
-path = 'contracts/stableBridge.clar'
-clarity_version = 2
-epoch = 2.5
-[repl.analysis]
-passes = ['check_checker']
 
-[repl.analysis.check_checker]
-strict = false
-trusted_sender = false
-trusted_caller = false
-callee_filter = false
+[contracts.fabulous-frogs]
+path = "contracts/nftMint.clar"
+depends_on = ["sip009-nft-trait"]
+
+[contracts.sip009-nft-trait]
+path = "contracts/sip009-nft-trait.clar"
+depends_on = []

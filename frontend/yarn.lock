@@ -243,6 +243,11 @@
   resolved "https://registry.npmjs.org/@radix-ui/react-compose-refs/-/react-compose-refs-1.1.0.tgz"
   integrity sha512-b4inOtiaOnYf9KWyO3jAeeCG6FeyfY6ldiEPanbUjWd+xIk5wZeHa8yVwmrJ2vderhu/BQvzCrJI0lHd+wIiqw==
 
+"@radix-ui/react-compose-refs@1.1.1":
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/@radix-ui/react-compose-refs/-/react-compose-refs-1.1.1.tgz#6f766faa975f8738269ebb8a23bad4f5a8d2faec"
+  integrity sha512-Y9VzoRDSJtgFMUCoiZBDVo084VQ5hfpXxVE+NgkdNsjiDBByiImMZKKhxMwCbdHvhlENG6a833CbFkOQvTricw==
+
 "@radix-ui/react-context@1.1.0":
   version "1.1.0"
   resolved "https://registry.npmjs.org/@radix-ui/react-context/-/react-context-1.1.0.tgz"
@@ -516,12 +521,12 @@
   dependencies:
     "@radix-ui/react-compose-refs" "1.1.0"
 
-"@radix-ui/react-slot@^1.1.0":
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/@radix-ui/react-slot/-/react-slot-1.1.0.tgz#7c5e48c36ef5496d97b08f1357bb26ed7c714b84"
-  integrity sha512-FUCf5XMfmW4dtYl69pdS4DbxKy8nj4M7SafBgPllysxmdachynNflAdp/gCsnYWNDnge6tI9onzMp5ARYc1KNw==
+"@radix-ui/react-slot@^1.1.1":
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/@radix-ui/react-slot/-/react-slot-1.1.1.tgz#ab9a0ffae4027db7dc2af503c223c978706affc3"
+  integrity sha512-RApLLOcINYJA+dMVbOju7MYv1Mb2EBp2nH4HdDzXTSyaR5optlm6Otrz1euW3HbdOR8UmmFK06TD+A9frYWv+g==
   dependencies:
-    "@radix-ui/react-compose-refs" "1.1.0"
+    "@radix-ui/react-compose-refs" "1.1.1"
 
 "@radix-ui/react-switch@^1.1.1":
   version "1.1.1"
@@ -644,6 +649,11 @@
   resolved "https://registry.yarnpkg.com/@stacks/common/-/common-7.0.0-next.70.tgz#2e0076e66643fb5b02a2acf8b8601b117715a121"
   integrity sha512-xCjTbMfEGBF8lvoAZOWJvv07nJmf18F5Q+2yYUrxGcojp6KAyvYNXzFZY+EatYztXkWV46bAnpGkxfCTGNytEA==
 
+"@stacks/common@^7.0.2":
+  version "7.0.2"
+  resolved "https://registry.yarnpkg.com/@stacks/common/-/common-7.0.2.tgz#8b17f9cf6265cf1c9065bf3cd844556870a6ee20"
+  integrity sha512-+RSecHdkxOtswmE4tDDoZlYEuULpnTQVeDIG5eZ32opK8cFxf4EugAcK9CsIsHx/Se1yTEaQ21WGATmJGK84lQ==
+
 "@stacks/connect-ui@6.5.0":
   version "6.5.0"
   resolved "https://registry.yarnpkg.com/@stacks/connect-ui/-/connect-ui-6.5.0.tgz#62741427c0107a7e7f137dfb63280eb16a9e49bb"
@@ -712,6 +722,14 @@
     "@stacks/common" "^7.0.0-next.70+0adf46c4"
     cross-fetch "^3.1.5"
 
+"@stacks/network@^7.0.2":
+  version "7.0.2"
+  resolved "https://registry.yarnpkg.com/@stacks/network/-/network-7.0.2.tgz#bbf1cb049ebcc9d3f8048950c7d230d79c87cb0b"
+  integrity sha512-XzHnoWqku/jRrTgMXhmh3c+I0O9vDH24KlhzGDZtBu+8CGGyHNPAZzGwvoUShonMXrXjEnfO9IYQwV5aJhfv6g==
+  dependencies:
+    "@stacks/common" "^7.0.2"
+    cross-fetch "^3.1.5"
+
 "@stacks/profile@^7.0.0-next.70", "@stacks/profile@^7.0.0-next.70+0adf46c4":
   version "7.0.0-next.70"
   resolved "https://registry.yarnpkg.com/@stacks/profile/-/profile-7.0.0-next.70.tgz#a35b4b36bf9c41688234223495dcf0d3c0a9294f"
@@ -753,18 +771,6 @@
     c32check "^2.0.0"
     lodash.clonedeep "^4.5.0"
 
-"@stacks/transactions@^6.17.0":
-  version "6.17.0"
-  resolved "https://registry.yarnpkg.com/@stacks/transactions/-/transactions-6.17.0.tgz#01a77e919c4c8f638b9ddb5ac593eaff3e25f96b"
-  integrity sha512-FUah2BRgV66ApLcEXGNGhwyFTRXqX5Zco3LpiM3essw8PF0NQlHwwdPgtDko5RfrJl3LhGXXe/30nwsfNnB3+g==
-  dependencies:
-    "@noble/hashes" "1.1.5"
-    "@noble/secp256k1" "1.7.1"
-    "@stacks/common" "^6.16.0"
-    "@stacks/network" "^6.17.0"
-    c32check "^2.0.0"
-    lodash.clonedeep "^4.5.0"
-
 "@stacks/transactions@^7.0.0-next.70", "@stacks/transactions@^7.0.0-next.70+0adf46c4":
   version "7.0.0-next.70"
   resolved "https://registry.yarnpkg.com/@stacks/transactions/-/transactions-7.0.0-next.70.tgz#372c109d05ccf5c2ca7fe9a5b2b7cdc1c3eeff4d"
@@ -774,6 +780,18 @@
     "@noble/secp256k1" "1.7.1"
     "@stacks/common" "^7.0.0-next.70+0adf46c4"
     "@stacks/network" "^7.0.0-next.70+0adf46c4"
+    c32check "^2.0.0"
+    lodash.clonedeep "^4.5.0"
+
+"@stacks/transactions@^7.0.2":
+  version "7.0.2"
+  resolved "https://registry.yarnpkg.com/@stacks/transactions/-/transactions-7.0.2.tgz#fe4a3ece5a779b65a1d7cbef9393f13dc7ec7f85"
+  integrity sha512-m2bvchqUeYv1ttXuC0EukW8UX4xBXTDcYb8bXmfI1RG89HXAvvCCgr5aiadU6zbutgoXvm8mquDt3nww0PO4Jg==
+  dependencies:
+    "@noble/hashes" "1.1.5"
+    "@noble/secp256k1" "1.7.1"
+    "@stacks/common" "^7.0.2"
+    "@stacks/network" "^7.0.2"
     c32check "^2.0.0"
     lodash.clonedeep "^4.5.0"
 

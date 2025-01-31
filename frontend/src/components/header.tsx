@@ -109,6 +109,16 @@ export function Header() {
                           <ArrowRightIcon className="h-4 w-4 opacity-0 transition-opacity group-hover:opacity-100" />
                         </Link>
                       </NavigationMenuLink>
+                      <NavigationMenuLink asChild>
+                        <Link
+                          href="/mint-nft"
+                          className="group flex items-center justify-between rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50"
+                          prefetch={false}
+                        >
+                          Mint NFT
+                          <ArrowRightIcon className="h-4 w-4 opacity-0 transition-opacity group-hover:opacity-100" />
+                        </Link>
+                      </NavigationMenuLink>
                     </div>
                   </NavigationMenuContent>
                 </NavigationMenuItem>
@@ -502,4 +512,3 @@ function XIcon(props:any) {
 function microStacksClient(arg0: { appDetails: { name: string; icon: string; }; network: string; }) {
   throw new Error("Function not implemented.");
 }
-
