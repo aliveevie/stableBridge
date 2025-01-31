@@ -1,5 +1,5 @@
 {
-  "name": "contracts-tests",
+  "name": "nft-markets-tests",
   "version": "1.0.0",
   "description": "Run unit tests on this project.",
   "type": "module",
@@ -13,8 +13,9 @@
   "license": "ISC",
   "dependencies": {
     "@hirosystems/clarinet-sdk": "^2.3.2",
+    "@stacks/connect": "^7.10.0",
     "@stacks/network": "^7.0.2",
-    "@stacks/transactions": "^6.12.0",
+    "@stacks/transactions": "^6.17.0",
     "chokidar-cli": "^3.0.0",
     "typescript": "^5.3.3",
     "vite": "^5.1.4",

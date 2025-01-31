@@ -1,0 +1,28 @@
+[project]
+name = 'nft-markets'
+description = ''
+authors = []
+telemetry = true
+cache_dir = './.cache'
+requirements = []
+
+[contracts.sip-010-trait-ft-standard]
+path = 'contracts/sip-010-trait-ft-standard.clar'
+depends_on = []
+
+[contracts.nft-trait]
+path = 'contracts/nft-trait.clar'
+depends_on = []
+
+[contracts.nft-market]
+path = 'contracts/nft-market.clar'
+depends_on = ["sip-010-trait-ft-standard", "nft-trait"]
+
+[repl.analysis]
+passes = ['check_checker']
+
+[repl.analysis.check_checker]
+strict = false
+trusted_sender = false
+trusted_caller = false
+callee_filter = false
