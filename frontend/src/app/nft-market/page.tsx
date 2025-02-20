@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -8,6 +8,7 @@ import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { UserContext } from "@/components/userContext"
 
 type Listing = {
   id: number;
@@ -20,6 +21,7 @@ type Listing = {
 };
 
 export default function NFTMarketInterface() {
+  const { userData } = useContext(UserContext);
   // State for form inputs
   const [activeTab, setActiveTab] = useState('list');
   const [listingResult, setListingResult] = useState<string | null>(null);
@@ -53,10 +55,6 @@ export default function NFTMarketInterface() {
     status: 'true',
   });
 
-  // Mock wallet connection status
-  const [walletConnected, setWalletConnected] = useState(false);
-  const [walletAddress, setWalletAddress] = useState('');
-
   // Handle list asset form changes
   const handleListFormChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -81,15 +79,9 @@ export default function NFTMarketInterface() {
     setWhitelistForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Connect wallet function (mock)
+  // Connect wallet function
   const connectWallet = async () => {
-    try {
-      // In a real app, this would use Stacks.js or another wallet connector
-      setWalletConnected(true);
-      setWalletAddress('ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM');
-    } catch (error) {
-      setErrorMessage('Failed to connect wallet');
-    }
+    setErrorMessage('Please use the main connect button in the navigation bar');
   };
 
   // Mock function to simulate listing an asset
@@ -97,7 +89,7 @@ export default function NFTMarketInterface() {
     try {
       setErrorMessage(null);
       
-      if (!walletConnected) {
+      if (!userData) {
         setErrorMessage('Please connect your wallet first');
         return;
       }
@@ -112,7 +104,7 @@ export default function NFTMarketInterface() {
       
       const newListing: Listing = {
         id: mockListingId,
-        seller: walletAddress,
+        seller: userData.wallet,
         tokenId: parseInt(listForm.tokenId),
         price: parseInt(listForm.price),
         expiry: parseInt(listForm.expiry),
@@ -142,7 +134,7 @@ export default function NFTMarketInterface() {
     try {
       setErrorMessage(null);
       
-      if (!walletConnected) {
+      if (!userData) {
         setErrorMessage('Please connect your wallet first');
         return;
       }
@@ -188,7 +180,7 @@ export default function NFTMarketInterface() {
     try {
       setErrorMessage(null);
       
-      if (!walletConnected) {
+      if (!userData) {
         setErrorMessage('Please connect your wallet first');
         return;
       }
@@ -230,7 +222,7 @@ export default function NFTMarketInterface() {
     try {
       setErrorMessage(null);
       
-      if (!walletConnected) {
+      if (!userData) {
         setErrorMessage('Please connect your wallet first');
         return;
       }
@@ -276,19 +268,12 @@ export default function NFTMarketInterface() {
           </CardHeader>
           <CardContent>
             <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm text-gray-500">
-                  {walletConnected 
-                    ? `Connected: ${walletAddress.substring(0, 8)}...${walletAddress.substring(walletAddress.length - 4)}` 
-                    : 'Not connected'}
-                </p>
-              </div>
               <Button
                 onClick={connectWallet}
-                disabled={walletConnected}
-                variant={walletConnected ? "outline" : "default"}
+                disabled={!!userData}
+                variant={userData ? "outline" : "default"}
               >
-                {walletConnected ? "Connected" : "Connect Wallet"}
+                {userData ? "Connected" : "Connect Wallet"}
               </Button>
             </div>
           </CardContent>
@@ -405,7 +390,7 @@ export default function NFTMarketInterface() {
                   </div>
                 </div>
 
-                <Button onClick={listAsset} className="w-full mt-4" disabled={!walletConnected}>
+                <Button onClick={listAsset} className="w-full mt-4" disabled={!userData}>
                   List NFT
                 </Button>
               </CardContent>
@@ -476,7 +461,7 @@ export default function NFTMarketInterface() {
                   )}
                 </div>
 
-                <Button onClick={fulfillListing} className="w-full mt-4" disabled={!walletConnected}>
+                <Button onClick={fulfillListing} className="w-full mt-4" disabled={!userData}>
                   Purchase NFT
                 </Button>
               </CardContent>
@@ -517,7 +502,7 @@ export default function NFTMarketInterface() {
                   </div>
                 </div>
 
-                <Button onClick={cancelListingFn} className="w-full mt-4" disabled={!walletConnected}>
+                <Button onClick={cancelListingFn} className="w-full mt-4" disabled={!userData}>
                   Cancel Listing
                 </Button>
               </CardContent>
@@ -562,7 +547,7 @@ export default function NFTMarketInterface() {
                   </div>
                 </div>
 
-                <Button onClick={setWhitelisted} className="w-full mt-4" disabled={!walletConnected}>
+                <Button onClick={setWhitelisted} className="w-full mt-4" disabled={!userData}>
                   Update Whitelist
                 </Button>
               </CardContent>
