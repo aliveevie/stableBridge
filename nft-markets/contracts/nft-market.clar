@@ -114,9 +114,11 @@
   (default-to false (map-get? whitelisted-asset-contracts asset-contract))
 )
 
+
 (define-public (set-whitelisted (asset-contract principal) (whitelisted bool))
   (begin
-    (asserts! (is-eq contract-owner tx-sender) ERR_UNAUTHORISED)
+    (try! (asserts! (is-eq contract-owner tx-sender) ERR_UNAUTHORISED))
+    (try! (asserts! (is-principal-contract? asset-contract) ERR_INVALID_CONTRACT))
     (ok (map-set whitelisted-asset-contracts asset-contract whitelisted))
   )
 )
@@ -172,7 +174,6 @@
 (define-private (transfer-ft (ft-contract <ft-trait>) (amount uint) (sender principal) (recipient principal))
   (contract-call? ft-contract transfer amount sender recipient none))
 
-;; ... rest of your contract code ...
 
 (define-private (assert-can-fulfil
   (nft-asset-contract principal)
