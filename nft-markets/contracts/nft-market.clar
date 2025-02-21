@@ -37,7 +37,6 @@
 ;; Used for unique IDs for each listing
 (define-data-var listing-nonce uint u0)
 
-
 (define-public (list-asset
   (nft-asset-contract <nft-trait>)
   (nft-asset {
