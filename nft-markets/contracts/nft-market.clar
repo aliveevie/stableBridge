@@ -114,7 +114,6 @@
   (default-to false (map-get? whitelisted-asset-contracts asset-contract))
 )
 
-
 (define-public (set-whitelisted (asset-contract principal) (whitelisted bool))
   (begin
     (try! (asserts! (is-eq contract-owner tx-sender) ERR_UNAUTHORISED))
