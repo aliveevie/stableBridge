@@ -18,7 +18,10 @@
 ;; Define contract owner
 (define-constant contract-owner tx-sender)
 
-;; ... rest of your contract code ...
+;; Define error constants
+(define-constant ERR_ASSET_CONTRACT_MISMATCH (err u1002))
+(define-constant ERR_INVALID_TOKEN_ID (err u1003))
+(define-constant ERR_INVALID_PRICE (err u1004))
 
 ;; Define a map data structure for the asset listings
 (define-map listings
@@ -130,22 +133,34 @@
     )
   )
 )
-
 (define-public (fulfil-listing-stx (listing-id uint) (nft-asset-contract <nft-trait>))
   (let (
     ;; Verify the given listing ID exists
     (listing (unwrap! (map-get? listings listing-id) ERR_UNKNOWN_LISTING))
     ;; Set the NFT's taker to the purchaser (caller of the function)
     (taker tx-sender)
+    ;; Get the contract principal for validation
+    (token-contract (contract-of nft-asset-contract))
   )
     ;; Validate that the purchase can be fulfilled
-    (try! (assert-can-fulfil (contract-of nft-asset-contract) none listing))
+    (asserts! (is-eq token-contract (get nft-asset-contract listing)) ERR_ASSET_CONTRACT_MISMATCH)
+    (try! (assert-can-fulfil token-contract none listing))
+    
+    ;; Verify the token-id is valid (greater than zero)
+    (asserts! (> (get token-id listing) u0) ERR_INVALID_TOKEN_ID)
+    
     ;; Transfer the NFT to the purchaser (caller of the function)
     (try! (as-contract (transfer-nft nft-asset-contract (get token-id listing) tx-sender taker)))
+    
+    ;; Verify the price is valid before the transfer
+    (asserts! (> (get price listing) u0) ERR_INVALID_PRICE)
+    
     ;; Transfer the STX payment from the purchaser to the creator of the NFT
     (try! (stx-transfer? (get price listing) taker (get maker listing)))
+    
     ;; Remove the NFT from the marketplace listings
     (map-delete listings listing-id)
+    
     ;; Return the listing ID that was just purchased
     (ok listing-id)
   )
