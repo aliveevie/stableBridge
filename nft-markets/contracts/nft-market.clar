@@ -15,6 +15,8 @@
 (define-constant ERR_UNINTENDED_TAKER (err u2006))
 (define-constant ERR_ASSET_CONTRACT_NOT_WHITELISTED (err u2007))
 (define-constant ERR_PAYMENT_CONTRACT_NOT_WHITELISTED (err u2008))
+(define-constant ERR_PAYMENT_CONTRACT_MISMATCH (err u101)) ;; Define the missing error constant
+
 ;; Define contract owner
 (define-constant contract-owner tx-sender)
 
@@ -133,6 +135,7 @@
     )
   )
 )
+
 (define-public (fulfil-listing-stx (listing-id uint) (nft-asset-contract <nft-trait>))
   (let (
     ;; Verify the given listing ID exists
@@ -166,6 +169,8 @@
   )
 )
 
+;; Define error constants
+
 (define-public (fulfil-listing-ft
   (listing-id uint)
   (nft-asset-contract <nft-trait>)
@@ -176,23 +181,41 @@
     (listing (unwrap! (map-get? listings listing-id) ERR_UNKNOWN_LISTING))
     ;; Set the NFT's taker to the purchaser (caller of the function)
     (taker tx-sender)
+    ;; Get the contract principals for validation
+    (nft-contract (contract-of nft-asset-contract))
+    (ft-contract (contract-of payment-asset-contract))
+    ;; Get the expected payment contract from listing
+    (expected-payment-contract (unwrap! (get payment-asset-contract listing) ERR_PAYMENT_CONTRACT_MISMATCH))
   )
+    ;; Validate the NFT contract matches what's in the listing
+    (asserts! (is-eq nft-contract (get nft-asset-contract listing)) ERR_ASSET_CONTRACT_MISMATCH)
+    
+    ;; Validate the payment contract matches what's in the listing
+    (asserts! (is-eq ft-contract expected-payment-contract) ERR_PAYMENT_CONTRACT_MISMATCH)
+    
     ;; Validate that the purchase can be fulfilled
-    (try! (assert-can-fulfil
-      (contract-of nft-asset-contract)
-      (some (contract-of payment-asset-contract))
-      listing
-    ))
+    (try! (assert-can-fulfil nft-contract (some ft-contract) listing))
+    
+    ;; Verify the token-id is valid (greater than zero)
+    (asserts! (> (get token-id listing) u0) ERR_INVALID_TOKEN_ID)
+    
+    ;; Verify the price is valid before the transfer
+    (asserts! (> (get price listing) u0) ERR_INVALID_PRICE)
+    
     ;; Transfer the NFT to the purchaser (caller of the function)
     (try! (as-contract (transfer-nft nft-asset-contract (get token-id listing) tx-sender taker)))
+    
     ;; Transfer the tokens as payment from the purchaser to the creator of the NFT
     (try! (transfer-ft payment-asset-contract (get price listing) taker (get maker listing)))
+    
     ;; Remove the NFT from the marketplace listings
     (map-delete listings listing-id)
+    
     ;; Return the listing ID that was just purchased
     (ok listing-id)
   )
 )
+
 
 (define-private (transfer-ft (ft-contract <ft-trait>) (amount uint) (sender principal) (recipient principal))
   (contract-call? ft-contract transfer amount sender recipient none))
