@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -9,6 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { UserContext } from "@/components/userContext"
+import { Badge } from '@/components/ui/badge';
 
 type Listing = {
   id: number;
@@ -27,6 +28,8 @@ export default function NFTMarketInterface() {
   const [listingResult, setListingResult] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [listings, setListings] = useState<Listing[]>([]);
+  const [networkType, setNetworkType] = useState<string>('testnet');
+  const [currentBlockHeight, setCurrentBlockHeight] = useState<number>(0);
 
   // Form states
   const [listForm, setListForm] = useState({
@@ -54,6 +57,25 @@ export default function NFTMarketInterface() {
     assetContract: '',
     status: 'true',
   });
+
+  // Simulate fetching the current block height from the testnet
+  useEffect(() => {
+    // In a real implementation, this would make an API call to the Stacks testnet
+    const mockBlockHeight = Math.floor(Math.random() * 10000) + 40000;
+    setCurrentBlockHeight(mockBlockHeight);
+  }, []);
+
+  // Check if user is connected to testnet
+  useEffect(() => {
+    if (userData) {
+      // Verify that they're using a testnet address
+      if (!userData.profile?.stxAddress?.testnet) {
+        setErrorMessage('Please connect using a testnet wallet address');
+      } else {
+        setErrorMessage(null);
+      }
+    }
+  }, [userData]);
 
   // Handle list asset form changes
   const handleListFormChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -84,18 +106,37 @@ export default function NFTMarketInterface() {
     setErrorMessage('Please use the main connect button in the navigation bar');
   };
 
-  // Mock function to simulate listing an asset
+  // Helper function to check network
+  const checkTestnetConnection = () => {
+    if (!userData) {
+      setErrorMessage('Please connect your wallet first');
+      return false;
+    }
+    
+    if (!userData.profile?.stxAddress?.testnet) {
+      setErrorMessage('This interface only works with testnet wallets');
+      return false;
+    }
+    
+    return true;
+  };
+
+  // Mock function to simulate listing an asset on testnet
   const listAsset = async () => {
     try {
       setErrorMessage(null);
+      setListingResult(null);
       
-      if (!userData) {
-        setErrorMessage('Please connect your wallet first');
-        return;
-      }
+      if (!checkTestnetConnection()) return;
       
       if (!listForm.tokenId || !listForm.price || !listForm.expiry) {
         setErrorMessage('Please fill in all required fields');
+        return;
+      }
+
+      const expiry = parseInt(listForm.expiry);
+      if (expiry <= currentBlockHeight) {
+        setErrorMessage(`Expiry block height must be greater than current block height (${currentBlockHeight})`);
         return;
       }
 
@@ -104,7 +145,7 @@ export default function NFTMarketInterface() {
       
       const newListing: Listing = {
         id: mockListingId,
-        seller: userData.wallet,
+        seller: userData.profile.stxAddress.testnet,
         tokenId: parseInt(listForm.tokenId),
         price: parseInt(listForm.price),
         expiry: parseInt(listForm.expiry),
@@ -113,7 +154,7 @@ export default function NFTMarketInterface() {
       };
       
       setListings([...listings, newListing]);
-      setListingResult(`Successfully listed NFT with ID: ${mockListingId}`);
+      setListingResult(`Successfully listed NFT with ID: ${mockListingId} on testnet`);
       
       // Reset form after successful listing
       setListForm({
@@ -125,19 +166,17 @@ export default function NFTMarketInterface() {
         taker: '',
       });
     } catch (error) {
-      setErrorMessage('Transaction failed. Please try again.');
+      setErrorMessage('Transaction failed on testnet. Please try again.');
     }
   };
 
-  // Mock function to simulate fulfilling a listing
+  // Mock function to simulate fulfilling a listing on testnet
   const fulfillListing = async () => {
     try {
       setErrorMessage(null);
+      setListingResult(null);
       
-      if (!userData) {
-        setErrorMessage('Please connect your wallet first');
-        return;
-      }
+      if (!checkTestnetConnection()) return;
       
       if (!fulfillForm.listingId) {
         setErrorMessage('Please enter a listing ID');
@@ -149,14 +188,14 @@ export default function NFTMarketInterface() {
       );
 
       if (!listingExists) {
-        setErrorMessage('Listing not found');
+        setErrorMessage('Listing not found on testnet');
         return;
       }
 
       // In a real app, this would call the appropriate contract function
       const method = fulfillForm.paymentType === 'stx' ? 'fulfil-listing-stx' : 'fulfil-listing-ft';
       
-      setListingResult(`Successfully purchased NFT using ${method}`);
+      setListingResult(`Successfully purchased NFT using ${method} on testnet`);
       
       // Update listings array - remove the purchased listing
       setListings(listings.filter(
@@ -171,19 +210,17 @@ export default function NFTMarketInterface() {
         paymentContract: 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.sip-010-trait-ft-standard',
       });
     } catch (error) {
-      setErrorMessage('Transaction failed. Please try again.');
+      setErrorMessage('Transaction failed on testnet. Please try again.');
     }
   };
 
-  // Mock function to simulate canceling a listing
+  // Mock function to simulate canceling a listing on testnet
   const cancelListingFn = async () => {
     try {
       setErrorMessage(null);
+      setListingResult(null);
       
-      if (!userData) {
-        setErrorMessage('Please connect your wallet first');
-        return;
-      }
+      if (!checkTestnetConnection()) return;
       
       if (!cancelForm.listingId) {
         setErrorMessage('Please enter a listing ID');
@@ -195,12 +232,12 @@ export default function NFTMarketInterface() {
       );
 
       if (!listingExists) {
-        setErrorMessage('Listing not found');
+        setErrorMessage('Listing not found on testnet');
         return;
       }
 
       // In a real app, this would call the contract function
-      setListingResult(`Successfully canceled listing #${cancelForm.listingId}`);
+      setListingResult(`Successfully canceled listing #${cancelForm.listingId} on testnet`);
       
       // Update listings array
       setListings(listings.filter(
@@ -213,19 +250,17 @@ export default function NFTMarketInterface() {
         nftContract: 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.nft-trait',
       });
     } catch (error) {
-      setErrorMessage('Transaction failed. Please try again.');
+      setErrorMessage('Transaction failed on testnet. Please try again.');
     }
   };
 
-  // Mock function to simulate setting whitelist status
+  // Mock function to simulate setting whitelist status on testnet
   const setWhitelisted = async () => {
     try {
       setErrorMessage(null);
+      setListingResult(null);
       
-      if (!userData) {
-        setErrorMessage('Please connect your wallet first');
-        return;
-      }
+      if (!checkTestnetConnection()) return;
       
       if (!whitelistForm.assetContract) {
         setErrorMessage('Please enter an asset contract');
@@ -235,7 +270,7 @@ export default function NFTMarketInterface() {
       // In a real app, this would call the contract function
       setListingResult(
         `Successfully ${whitelistForm.status === 'true' ? 'added' : 'removed'} 
-        ${whitelistForm.assetContract} ${whitelistForm.status === 'true' ? 'to' : 'from'} whitelist`
+        ${whitelistForm.assetContract} ${whitelistForm.status === 'true' ? 'to' : 'from'} whitelist on testnet`
       );
       
       // Reset form
@@ -244,37 +279,56 @@ export default function NFTMarketInterface() {
         status: 'true',
       });
     } catch (error) {
-      setErrorMessage('Transaction failed. Please try again.');
+      setErrorMessage('Transaction failed on testnet. Please try again.');
     }
   };
+
+  // Get the user's testnet address from context
+  const userTestnetAddress = userData?.profile?.stxAddress?.testnet || 'Not connected';
 
   return (
     <div className="container mx-auto py-8 px-4">
       <div className="flex flex-col gap-6">
         <header className="text-center mb-4">
           <h1 className="text-3xl font-bold mb-2">NFT Market Interface</h1>
-          <p className="text-gray-500">
-            Interact with the Clarity NFT Market contract
-          </p>
+          <div className="flex justify-center items-center gap-2">
+            <Badge variant="outline" className="bg-yellow-100">Testnet Only</Badge>
+            <p className="text-gray-500">
+              Interact with the Clarity NFT Market contract on Stacks Testnet
+            </p>
+          </div>
         </header>
 
-        {/* Wallet Connection */}
+        {/* Network and Wallet Info */}
         <Card>
           <CardHeader className="pb-3">
-            <CardTitle>Wallet Connection</CardTitle>
+            <CardTitle>Network Status</CardTitle>
             <CardDescription>
-              Connect your Stacks wallet to interact with the contract
+              Connected to Stacks Testnet
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="flex items-center justify-between">
-              <Button
-                onClick={connectWallet}
-                disabled={!!userData}
-                variant={userData ? "outline" : "default"}
-              >
-                {userData ? "Connected" : "Connect Wallet"}
-              </Button>
+            <div className="flex flex-col gap-2">
+              <div className="grid grid-cols-2 gap-2">
+                <div>
+                  <span className="text-sm text-gray-500">Current Network:</span>
+                  <span className="ml-2 font-medium text-yellow-600">Testnet</span>
+                </div>
+                <div>
+                  <span className="text-sm text-gray-500">Block Height:</span>
+                  <span className="ml-2 font-medium">{currentBlockHeight}</span>
+                </div>
+              </div>
+              <div>
+                <span className="text-sm text-gray-500">Wallet Address:</span>
+                <span className="ml-2 font-medium overflow-hidden text-ellipsis">{userTestnetAddress}</span>
+              </div>
+              {userData && !userData.profile?.stxAddress?.testnet && (
+                <Alert variant="destructive" className="mt-2">
+                  <AlertTitle>Wrong Network</AlertTitle>
+                  <AlertDescription>Please switch to a testnet wallet to interact with this interface</AlertDescription>
+                </Alert>
+              )}
             </div>
           </CardContent>
         </Card>
@@ -310,7 +364,7 @@ export default function NFTMarketInterface() {
               <CardHeader>
                 <CardTitle>List NFT for Sale</CardTitle>
                 <CardDescription>
-                  Put your NFT up for sale on the marketplace
+                  Put your NFT up for sale on the testnet marketplace
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -352,14 +406,17 @@ export default function NFTMarketInterface() {
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="expiry">Expiry (block height)</Label>
-                    <Input
-                      id="expiry"
-                      name="expiry"
-                      type="number"
-                      placeholder="Enter expiry block height"
-                      value={listForm.expiry}
-                      onChange={handleListFormChange}
-                    />
+                    <div className="flex flex-col space-y-1">
+                      <Input
+                        id="expiry"
+                        name="expiry"
+                        type="number"
+                        placeholder={`Enter block height (current: ${currentBlockHeight})`}
+                        value={listForm.expiry}
+                        onChange={handleListFormChange}
+                      />
+                      <span className="text-xs text-gray-500">Current block height: {currentBlockHeight}</span>
+                    </div>
                   </div>
                 </div>
 
@@ -390,8 +447,12 @@ export default function NFTMarketInterface() {
                   </div>
                 </div>
 
-                <Button onClick={listAsset} className="w-full mt-4" disabled={!userData}>
-                  List NFT
+                <Button 
+                  onClick={listAsset} 
+                  className="w-full mt-4" 
+                  disabled={!userData || !userData.profile?.stxAddress?.testnet}
+                >
+                  List NFT on Testnet
                 </Button>
               </CardContent>
             </Card>
@@ -403,7 +464,7 @@ export default function NFTMarketInterface() {
               <CardHeader>
                 <CardTitle>Buy NFT</CardTitle>
                 <CardDescription>
-                  Purchase an NFT from an existing listing
+                  Purchase an NFT from an existing testnet listing
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -461,8 +522,12 @@ export default function NFTMarketInterface() {
                   )}
                 </div>
 
-                <Button onClick={fulfillListing} className="w-full mt-4" disabled={!userData}>
-                  Purchase NFT
+                <Button 
+                  onClick={fulfillListing} 
+                  className="w-full mt-4" 
+                  disabled={!userData || !userData.profile?.stxAddress?.testnet}
+                >
+                  Purchase NFT on Testnet
                 </Button>
               </CardContent>
             </Card>
@@ -474,7 +539,7 @@ export default function NFTMarketInterface() {
               <CardHeader>
                 <CardTitle>Cancel Listing</CardTitle>
                 <CardDescription>
-                  Remove your NFT listing from the marketplace
+                  Remove your NFT listing from the testnet marketplace
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -502,8 +567,12 @@ export default function NFTMarketInterface() {
                   </div>
                 </div>
 
-                <Button onClick={cancelListingFn} className="w-full mt-4" disabled={!userData}>
-                  Cancel Listing
+                <Button 
+                  onClick={cancelListingFn} 
+                  className="w-full mt-4" 
+                  disabled={!userData || !userData.profile?.stxAddress?.testnet}
+                >
+                  Cancel Listing on Testnet
                 </Button>
               </CardContent>
             </Card>
@@ -515,7 +584,7 @@ export default function NFTMarketInterface() {
               <CardHeader>
                 <CardTitle>Manage Whitelist</CardTitle>
                 <CardDescription>
-                  Control which asset contracts can be listed on the marketplace
+                  Control which asset contracts can be listed on the testnet marketplace
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -547,8 +616,12 @@ export default function NFTMarketInterface() {
                   </div>
                 </div>
 
-                <Button onClick={setWhitelisted} className="w-full mt-4" disabled={!userData}>
-                  Update Whitelist
+                <Button 
+                  onClick={setWhitelisted} 
+                  className="w-full mt-4" 
+                  disabled={!userData || !userData.profile?.stxAddress?.testnet}
+                >
+                  Update Whitelist on Testnet
                 </Button>
               </CardContent>
             </Card>
@@ -558,21 +631,24 @@ export default function NFTMarketInterface() {
         {/* Active Listings */}
         <Card>
           <CardHeader>
-            <CardTitle>Active Listings</CardTitle>
+            <CardTitle>Active Testnet Listings</CardTitle>
             <CardDescription>
-              Currently active NFT listings on the marketplace
+              Currently active NFT listings on the testnet marketplace
             </CardDescription>
           </CardHeader>
           <CardContent>
             {listings.length === 0 ? (
-              <p className="text-gray-500 text-center py-4">No active listings found</p>
+              <p className="text-gray-500 text-center py-4">No active testnet listings found</p>
             ) : (
               <div className="space-y-4">
                 {listings.map((listing) => (
                   <div key={listing.id} className="border rounded-md p-4">
                     <div className="flex justify-between items-start">
                       <div>
-                        <h3 className="font-medium">Listing #{listing.id}</h3>
+                        <div className="flex items-center gap-2">
+                          <h3 className="font-medium">Listing #{listing.id}</h3>
+                          <Badge variant="outline" className="bg-yellow-50">Testnet</Badge>
+                        </div>
                         <p className="text-sm text-gray-500">
                           Token ID: {listing.tokenId}
                         </p>
@@ -581,6 +657,9 @@ export default function NFTMarketInterface() {
                         </p>
                         <p className="text-sm text-gray-500">
                           Expires at block: {listing.expiry}
+                        </p>
+                        <p className="text-sm text-gray-500 truncate max-w-md">
+                          Seller: {listing.seller}
                         </p>
                       </div>
                       <Button
@@ -593,6 +672,7 @@ export default function NFTMarketInterface() {
                           });
                           setActiveTab('buy');
                         }}
+                        disabled={!userData || !userData.profile?.stxAddress?.testnet}
                       >
                         Buy Now
                       </Button>
