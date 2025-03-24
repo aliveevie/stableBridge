@@ -150,7 +150,16 @@ export default function NFTMarketInterface() {
         return;
       }
 
+      const tokenId = parseInt(listForm.tokenId);
+      const price = parseInt(listForm.price);
       const expiry = parseInt(listForm.expiry);
+
+      // Validate all values are positive
+      if (tokenId < 0 || price < 0 || expiry < 0) {
+        setErrorMessage('All values must be positive numbers');
+        return;
+      }
+
       if (expiry <= currentBlockHeight) {
         setErrorMessage(`Expiry block height must be greater than current block height (${currentBlockHeight})`);
         return;
@@ -162,9 +171,9 @@ export default function NFTMarketInterface() {
         functionName: 'list-asset',
         functionArgs: [
           contractPrincipalCV(listForm.nftContract.split('.')[0], listForm.nftContract.split('.')[1]),
-          uintCV(parseInt(listForm.tokenId)),
-          uintCV(parseInt(listForm.price)),
-          uintCV(parseInt(listForm.expiry)),
+          uintCV(tokenId),
+          uintCV(price),
+          uintCV(expiry),
           listForm.paymentContract ? 
             contractPrincipalCV(listForm.paymentContract.split('.')[0], listForm.paymentContract.split('.')[1]) : 
             null,
@@ -336,20 +345,31 @@ export default function NFTMarketInterface() {
       const response = await fetch(
         `https://stacks-node-api.testnet.stacks.co/extended/v1/contract/${NFT_MARKET_CONTRACT}/read/get-listings`
       );
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
       const data = await response.json();
+      
+      // Check if data is an array, if not, try to access the correct property
+      const listingsData = Array.isArray(data) ? data : data.result || [];
+      
       // Transform contract data into Listing[] format
-      const fetchedListings = data.map((item: any) => ({
-        id: item.value.id.value,
-        seller: item.value.seller.value,
-        tokenId: item.value['token-id'].value,
-        price: item.value.price.value,
-        expiry: item.value.expiry.value,
-        paymentAssetContract: item.value['payment-asset-contract']?.value || null,
-        taker: item.value.taker?.value || null,
+      const fetchedListings = listingsData.map((item: any) => ({
+        id: item.id?.value || 0,
+        seller: item.seller?.value || '',
+        tokenId: item['token-id']?.value || 0,
+        price: item.price?.value || 0,
+        expiry: item.expiry?.value || 0,
+        paymentAssetContract: item['payment-asset-contract']?.value || null,
+        taker: item.taker?.value || null,
       }));
+      
       setListings(fetchedListings);
     } catch (error) {
       console.error('Error fetching listings:', error);
+      setListings([]); // Set empty array on error
     }
   };
 
