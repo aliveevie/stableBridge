@@ -21,7 +21,7 @@ import {
   trueCV,
   falseCV
 } from '@stacks/transactions';
-import { StacksTestnet } from '@stacks/network';
+import { STACKS_TESTNET } from '@stacks/network';
 
 type Listing = {
   id: number;
@@ -35,7 +35,7 @@ type Listing = {
 
 // Add contract constants
 const NFT_MARKET_CONTRACT = 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.nft-marketplace';
-const TESTNET = new StacksTestnet();
+const TESTNET = STACKS_TESTNET;
 
 export default function NFTMarketInterface() {
   const { userData } = useContext(UserContext);
@@ -177,7 +177,7 @@ export default function NFTMarketInterface() {
       };
 
       const transaction = await makeContractCall(txOptions);
-      const broadcastResponse = await broadcastTransaction(transaction, TESTNET);
+      const broadcastResponse = await broadcastTransaction(transaction);
       
       setListingResult(`Transaction submitted: ${broadcastResponse.txid}`);
       
@@ -191,7 +191,7 @@ export default function NFTMarketInterface() {
         taker: '',
       });
     } catch (error) {
-      setErrorMessage(`Transaction failed: ${error.message}`);
+      setErrorMessage(`Transaction failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
   };
 
@@ -227,7 +227,7 @@ export default function NFTMarketInterface() {
       };
 
       const transaction = await makeContractCall(txOptions);
-      const broadcastResponse = await broadcastTransaction(transaction, TESTNET);
+      const broadcastResponse = await broadcastTransaction(transaction);
       
       setListingResult(`Transaction submitted: ${broadcastResponse.txid}`);
       
@@ -239,7 +239,7 @@ export default function NFTMarketInterface() {
         paymentContract: 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.sip-010-trait-ft-standard',
       });
     } catch (error) {
-      setErrorMessage(`Transaction failed: ${error.message}`);
+      setErrorMessage(`Transaction failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
   };
 
@@ -271,7 +271,7 @@ export default function NFTMarketInterface() {
       };
 
       const transaction = await makeContractCall(txOptions);
-      const broadcastResponse = await broadcastTransaction(transaction, TESTNET);
+      const broadcastResponse = await broadcastTransaction(transaction);
       
       setListingResult(`Transaction submitted: ${broadcastResponse.txid}`);
       
@@ -281,7 +281,7 @@ export default function NFTMarketInterface() {
         nftContract: 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.nft-trait',
       });
     } catch (error) {
-      setErrorMessage(`Transaction failed: ${error.message}`);
+      setErrorMessage(`Transaction failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
   };
 
@@ -316,7 +316,7 @@ export default function NFTMarketInterface() {
       };
 
       const transaction = await makeContractCall(txOptions);
-      const broadcastResponse = await broadcastTransaction(transaction, TESTNET);
+      const broadcastResponse = await broadcastTransaction(transaction);
       
       setListingResult(`Transaction submitted: ${broadcastResponse.txid}`);
       
@@ -326,7 +326,7 @@ export default function NFTMarketInterface() {
         status: 'true',
       });
     } catch (error) {
-      setErrorMessage(`Transaction failed: ${error.message}`);
+      setErrorMessage(`Transaction failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
   };
 
@@ -338,7 +338,7 @@ export default function NFTMarketInterface() {
       );
       const data = await response.json();
       // Transform contract data into Listing[] format
-      const fetchedListings = data.map(item => ({
+      const fetchedListings = data.map((item: any) => ({
         id: item.value.id.value,
         seller: item.value.seller.value,
         tokenId: item.value['token-id'].value,
