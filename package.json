@@ -9,5 +9,13 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "@stacks/connect": "^7.5.1",
+    "@stacks/network": "^6.11.3",
+    "@stacks/transactions": "^6.11.3",
+    "micro-stacks/api": "^1.0.0",
+    "micro-stacks/connect": "^1.0.0",
+    "micro-stacks/transactions": "^1.0.0"
+  }
 }

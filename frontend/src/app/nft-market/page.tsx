@@ -10,6 +10,18 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { UserContext } from "@/components/userContext"
 import { Badge } from '@/components/ui/badge';
+import { 
+  makeContractCall,
+  broadcastTransaction,
+  AnchorMode,
+  PostConditionMode,
+  uintCV,
+  contractPrincipalCV,
+  standardPrincipalCV,
+  trueCV,
+  falseCV
+} from '@stacks/transactions';
+import { StacksTestnet } from '@stacks/network';
 
 type Listing = {
   id: number;
@@ -20,6 +32,10 @@ type Listing = {
   paymentAssetContract: string | null;
   taker: string | null;
 };
+
+// Add contract constants
+const NFT_MARKET_CONTRACT = 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.nft-marketplace';
+const TESTNET = new StacksTestnet();
 
 export default function NFTMarketInterface() {
   const { userData } = useContext(UserContext);
@@ -121,7 +137,7 @@ export default function NFTMarketInterface() {
     return true;
   };
 
-  // Mock function to simulate listing an asset on testnet
+  // Replace mock listing function with actual contract call
   const listAsset = async () => {
     try {
       setErrorMessage(null);
@@ -140,23 +156,32 @@ export default function NFTMarketInterface() {
         return;
       }
 
-      // This would call the actual contract in a real implementation
-      const mockListingId = Math.floor(Math.random() * 1000);
-      
-      const newListing: Listing = {
-        id: mockListingId,
-        seller: userData.profile.stxAddress.testnet,
-        tokenId: parseInt(listForm.tokenId),
-        price: parseInt(listForm.price),
-        expiry: parseInt(listForm.expiry),
-        paymentAssetContract: listForm.paymentContract || null,
-        taker: listForm.taker || null,
+      const txOptions = {
+        contractAddress: NFT_MARKET_CONTRACT.split('.')[0],
+        contractName: NFT_MARKET_CONTRACT.split('.')[1],
+        functionName: 'list-asset',
+        functionArgs: [
+          contractPrincipalCV(listForm.nftContract.split('.')[0], listForm.nftContract.split('.')[1]),
+          uintCV(parseInt(listForm.tokenId)),
+          uintCV(parseInt(listForm.price)),
+          uintCV(parseInt(listForm.expiry)),
+          listForm.paymentContract ? 
+            contractPrincipalCV(listForm.paymentContract.split('.')[0], listForm.paymentContract.split('.')[1]) : 
+            null,
+          listForm.taker ? standardPrincipalCV(listForm.taker) : null
+        ],
+        network: TESTNET,
+        anchorMode: AnchorMode.Any,
+        postConditionMode: PostConditionMode.Allow,
+        senderAddress: userData.profile.stxAddress.testnet,
       };
+
+      const transaction = await makeContractCall(txOptions);
+      const broadcastResponse = await broadcastTransaction(transaction, TESTNET);
       
-      setListings([...listings, newListing]);
-      setListingResult(`Successfully listed NFT with ID: ${mockListingId} on testnet`);
+      setListingResult(`Transaction submitted: ${broadcastResponse.txid}`);
       
-      // Reset form after successful listing
+      // Reset form after successful submission
       setListForm({
         nftContract: 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.nft-trait',
         tokenId: '',
@@ -166,11 +191,11 @@ export default function NFTMarketInterface() {
         taker: '',
       });
     } catch (error) {
-      setErrorMessage('Transaction failed on testnet. Please try again.');
+      setErrorMessage(`Transaction failed: ${error.message}`);
     }
   };
 
-  // Mock function to simulate fulfilling a listing on testnet
+  // Replace mock fulfill function with actual contract call
   const fulfillListing = async () => {
     try {
       setErrorMessage(null);
@@ -183,24 +208,28 @@ export default function NFTMarketInterface() {
         return;
       }
 
-      const listingExists = listings.some(
-        listing => listing.id.toString() === fulfillForm.listingId
-      );
+      const functionName = fulfillForm.paymentType === 'stx' ? 
+        'fulfill-listing-stx' : 
+        'fulfill-listing-ft';
 
-      if (!listingExists) {
-        setErrorMessage('Listing not found on testnet');
-        return;
-      }
+      const txOptions = {
+        contractAddress: NFT_MARKET_CONTRACT.split('.')[0],
+        contractName: NFT_MARKET_CONTRACT.split('.')[1],
+        functionName: functionName,
+        functionArgs: [
+          uintCV(parseInt(fulfillForm.listingId)),
+          contractPrincipalCV(fulfillForm.nftContract.split('.')[0], fulfillForm.nftContract.split('.')[1])
+        ],
+        network: TESTNET,
+        anchorMode: AnchorMode.Any,
+        postConditionMode: PostConditionMode.Allow,
+        senderAddress: userData.profile.stxAddress.testnet,
+      };
 
-      // In a real app, this would call the appropriate contract function
-      const method = fulfillForm.paymentType === 'stx' ? 'fulfil-listing-stx' : 'fulfil-listing-ft';
+      const transaction = await makeContractCall(txOptions);
+      const broadcastResponse = await broadcastTransaction(transaction, TESTNET);
       
-      setListingResult(`Successfully purchased NFT using ${method} on testnet`);
-      
-      // Update listings array - remove the purchased listing
-      setListings(listings.filter(
-        listing => listing.id.toString() !== fulfillForm.listingId
-      ));
+      setListingResult(`Transaction submitted: ${broadcastResponse.txid}`);
       
       // Reset form
       setFulfillForm({
@@ -210,11 +239,11 @@ export default function NFTMarketInterface() {
         paymentContract: 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.sip-010-trait-ft-standard',
       });
     } catch (error) {
-      setErrorMessage('Transaction failed on testnet. Please try again.');
+      setErrorMessage(`Transaction failed: ${error.message}`);
     }
   };
 
-  // Mock function to simulate canceling a listing on testnet
+  // Replace mock cancel function with actual contract call
   const cancelListingFn = async () => {
     try {
       setErrorMessage(null);
@@ -227,22 +256,24 @@ export default function NFTMarketInterface() {
         return;
       }
 
-      const listingExists = listings.some(
-        listing => listing.id.toString() === cancelForm.listingId
-      );
+      const txOptions = {
+        contractAddress: NFT_MARKET_CONTRACT.split('.')[0],
+        contractName: NFT_MARKET_CONTRACT.split('.')[1],
+        functionName: 'cancel-listing',
+        functionArgs: [
+          uintCV(parseInt(cancelForm.listingId)),
+          contractPrincipalCV(cancelForm.nftContract.split('.')[0], cancelForm.nftContract.split('.')[1])
+        ],
+        network: TESTNET,
+        anchorMode: AnchorMode.Any,
+        postConditionMode: PostConditionMode.Allow,
+        senderAddress: userData.profile.stxAddress.testnet,
+      };
 
-      if (!listingExists) {
-        setErrorMessage('Listing not found on testnet');
-        return;
-      }
-
-      // In a real app, this would call the contract function
-      setListingResult(`Successfully canceled listing #${cancelForm.listingId} on testnet`);
+      const transaction = await makeContractCall(txOptions);
+      const broadcastResponse = await broadcastTransaction(transaction, TESTNET);
       
-      // Update listings array
-      setListings(listings.filter(
-        listing => listing.id.toString() !== cancelForm.listingId
-      ));
+      setListingResult(`Transaction submitted: ${broadcastResponse.txid}`);
       
       // Reset form
       setCancelForm({
@@ -250,11 +281,11 @@ export default function NFTMarketInterface() {
         nftContract: 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.nft-trait',
       });
     } catch (error) {
-      setErrorMessage('Transaction failed on testnet. Please try again.');
+      setErrorMessage(`Transaction failed: ${error.message}`);
     }
   };
 
-  // Mock function to simulate setting whitelist status on testnet
+  // Replace mock whitelist function with actual contract call
   const setWhitelisted = async () => {
     try {
       setErrorMessage(null);
@@ -267,11 +298,27 @@ export default function NFTMarketInterface() {
         return;
       }
 
-      // In a real app, this would call the contract function
-      setListingResult(
-        `Successfully ${whitelistForm.status === 'true' ? 'added' : 'removed'} 
-        ${whitelistForm.assetContract} ${whitelistForm.status === 'true' ? 'to' : 'from'} whitelist on testnet`
-      );
+      const txOptions = {
+        contractAddress: NFT_MARKET_CONTRACT.split('.')[0],
+        contractName: NFT_MARKET_CONTRACT.split('.')[1],
+        functionName: 'set-whitelisted',
+        functionArgs: [
+          contractPrincipalCV(
+            whitelistForm.assetContract.split('.')[0], 
+            whitelistForm.assetContract.split('.')[1]
+          ),
+          whitelistForm.status === 'true' ? trueCV() : falseCV()
+        ],
+        network: TESTNET,
+        anchorMode: AnchorMode.Any,
+        postConditionMode: PostConditionMode.Allow,
+        senderAddress: userData.profile.stxAddress.testnet,
+      };
+
+      const transaction = await makeContractCall(txOptions);
+      const broadcastResponse = await broadcastTransaction(transaction, TESTNET);
+      
+      setListingResult(`Transaction submitted: ${broadcastResponse.txid}`);
       
       // Reset form
       setWhitelistForm({
@@ -279,9 +326,37 @@ export default function NFTMarketInterface() {
         status: 'true',
       });
     } catch (error) {
-      setErrorMessage('Transaction failed on testnet. Please try again.');
+      setErrorMessage(`Transaction failed: ${error.message}`);
     }
   };
+
+  // Add function to fetch current listings from the contract
+  const fetchListings = async () => {
+    try {
+      const response = await fetch(
+        `https://stacks-node-api.testnet.stacks.co/extended/v1/contract/${NFT_MARKET_CONTRACT}/read/get-listings`
+      );
+      const data = await response.json();
+      // Transform contract data into Listing[] format
+      const fetchedListings = data.map(item => ({
+        id: item.value.id.value,
+        seller: item.value.seller.value,
+        tokenId: item.value['token-id'].value,
+        price: item.value.price.value,
+        expiry: item.value.expiry.value,
+        paymentAssetContract: item.value['payment-asset-contract']?.value || null,
+        taker: item.value.taker?.value || null,
+      }));
+      setListings(fetchedListings);
+    } catch (error) {
+      console.error('Error fetching listings:', error);
+    }
+  };
+
+  // Fetch listings on component mount and after successful transactions
+  useEffect(() => {
+    fetchListings();
+  }, []);
 
   // Get the user's testnet address from context
   const userTestnetAddress = userData?.profile?.stxAddress?.testnet || 'Not connected';
