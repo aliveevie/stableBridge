@@ -216,10 +216,8 @@
   )
 )
 
-
 (define-private (transfer-ft (ft-contract <ft-trait>) (amount uint) (sender principal) (recipient principal))
   (contract-call? ft-contract transfer amount sender recipient none))
-
 
 (define-private (assert-can-fulfil
   (nft-asset-contract principal)
@@ -254,5 +252,3 @@
     (ok true)
   )
 )
-
-
