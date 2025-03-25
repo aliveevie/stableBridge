@@ -1,0 +1,32 @@
+---
+id: 0
+name: Testnet deployment
+network: testnet
+stacks-node: "https://stacks-node-api.testnet.stacks.co"
+bitcoin-node: "http://blockstack:blockstacksystem@bitcoind.testnet.stacks.co:18332"
+plan:
+  batches:
+    - id: 0
+      transactions:
+        - contract-publish:
+            contract-name: nft-trait
+            expected-sender: ST1N26XGCQAF5QBSF8SVT5J0V2PSBHHP5NC7252AK
+            cost: 484
+            path: contracts/nft-trait.clar
+            anchor-block-only: true
+            clarity-version: 1
+        - contract-publish:
+            contract-name: sip-010-trait-ft-standard
+            expected-sender: ST1N26XGCQAF5QBSF8SVT5J0V2PSBHHP5NC7252AK
+            cost: 728
+            path: contracts/sip-010-trait-ft-standard.clar
+            anchor-block-only: true
+            clarity-version: 1
+        - contract-publish:
+            contract-name: nft-market
+            expected-sender: ST1N26XGCQAF5QBSF8SVT5J0V2PSBHHP5NC7252AK
+            cost: 7735
+            path: contracts/nft-market.clar
+            anchor-block-only: true
+            clarity-version: 1
+      epoch: "2.05"
