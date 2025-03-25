@@ -10,21 +10,21 @@ plan:
       transactions:
         - contract-publish:
             contract-name: nft-trait
-            expected-sender: ST1N26XGCQAF5QBSF8SVT5J0V2PSBHHP5NC7252AK
+            expected-sender: ST21J9CN7FH2DT1MKN24DX60AXT6XC1P5SS13SYFN
             cost: 484
             path: contracts/nft-trait.clar
             anchor-block-only: true
             clarity-version: 1
         - contract-publish:
             contract-name: sip-010-trait-ft-standard
-            expected-sender: ST1N26XGCQAF5QBSF8SVT5J0V2PSBHHP5NC7252AK
+            expected-sender: ST21J9CN7FH2DT1MKN24DX60AXT6XC1P5SS13SYFN
             cost: 728
             path: contracts/sip-010-trait-ft-standard.clar
             anchor-block-only: true
             clarity-version: 1
         - contract-publish:
             contract-name: nft-market
-            expected-sender: ST1N26XGCQAF5QBSF8SVT5J0V2PSBHHP5NC7252AK
+            expected-sender: ST21J9CN7FH2DT1MKN24DX60AXT6XC1P5SS13SYFN
             cost: 7735
             path: contracts/nft-market.clar
             anchor-block-only: true
