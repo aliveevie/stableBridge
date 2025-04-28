@@ -15,10 +15,15 @@
 (define-constant ERR_UNINTENDED_TAKER (err u2006))
 (define-constant ERR_ASSET_CONTRACT_NOT_WHITELISTED (err u2007))
 (define-constant ERR_PAYMENT_CONTRACT_NOT_WHITELISTED (err u2008))
+(define-constant ERR_PAYMENT_CONTRACT_MISMATCH (err u101)) ;; Define the missing error constant
+
 ;; Define contract owner
 (define-constant contract-owner tx-sender)
 
-;; ... rest of your contract code ...
+;; Define error constants
+(define-constant ERR_ASSET_CONTRACT_MISMATCH (err u1002))
+(define-constant ERR_INVALID_TOKEN_ID (err u1003))
+(define-constant ERR_INVALID_PRICE (err u1004))
 
 ;; Define a map data structure for the asset listings
 (define-map listings
@@ -36,7 +41,6 @@
 
 ;; Used for unique IDs for each listing
 (define-data-var listing-nonce uint u0)
-
 
 (define-public (list-asset
   (nft-asset-contract <nft-trait>)
@@ -114,10 +118,21 @@
   (default-to false (map-get? whitelisted-asset-contracts asset-contract))
 )
 
+;; Define error code for invalid contract
+(define-constant ERR_INVALID_CONTRACT (err u2009))
+
+;; Fix the set-whitelisted function
 (define-public (set-whitelisted (asset-contract principal) (whitelisted bool))
   (begin
+    ;; Only check that the caller is authorized
     (asserts! (is-eq contract-owner tx-sender) ERR_UNAUTHORISED)
-    (ok (map-set whitelisted-asset-contracts asset-contract whitelisted))
+    
+    ;; This is the key fix: use a simple version without try!
+    ;; Instead of returning bool, we'll return a response type
+    (if (is-eq asset-contract tx-sender)
+      ERR_INVALID_CONTRACT
+      (ok (map-set whitelisted-asset-contracts asset-contract whitelisted))
+    )
   )
 )
 
@@ -127,19 +142,34 @@
     (listing (unwrap! (map-get? listings listing-id) ERR_UNKNOWN_LISTING))
     ;; Set the NFT's taker to the purchaser (caller of the function)
     (taker tx-sender)
+    ;; Get the contract principal for validation
+    (token-contract (contract-of nft-asset-contract))
   )
     ;; Validate that the purchase can be fulfilled
-    (try! (assert-can-fulfil (contract-of nft-asset-contract) none listing))
+    (asserts! (is-eq token-contract (get nft-asset-contract listing)) ERR_ASSET_CONTRACT_MISMATCH)
+    (try! (assert-can-fulfil token-contract none listing))
+    
+    ;; Verify the token-id is valid (greater than zero)
+    (asserts! (> (get token-id listing) u0) ERR_INVALID_TOKEN_ID)
+    
     ;; Transfer the NFT to the purchaser (caller of the function)
     (try! (as-contract (transfer-nft nft-asset-contract (get token-id listing) tx-sender taker)))
+    
+    ;; Verify the price is valid before the transfer
+    (asserts! (> (get price listing) u0) ERR_INVALID_PRICE)
+    
     ;; Transfer the STX payment from the purchaser to the creator of the NFT
     (try! (stx-transfer? (get price listing) taker (get maker listing)))
+    
     ;; Remove the NFT from the marketplace listings
     (map-delete listings listing-id)
+    
     ;; Return the listing ID that was just purchased
     (ok listing-id)
   )
 )
+
+;; Define error constants
 
 (define-public (fulfil-listing-ft
   (listing-id uint)
@@ -151,19 +181,36 @@
     (listing (unwrap! (map-get? listings listing-id) ERR_UNKNOWN_LISTING))
     ;; Set the NFT's taker to the purchaser (caller of the function)
     (taker tx-sender)
+    ;; Get the contract principals for validation
+    (nft-contract (contract-of nft-asset-contract))
+    (ft-contract (contract-of payment-asset-contract))
+    ;; Get the expected payment contract from listing
+    (expected-payment-contract (unwrap! (get payment-asset-contract listing) ERR_PAYMENT_CONTRACT_MISMATCH))
   )
+    ;; Validate the NFT contract matches what's in the listing
+    (asserts! (is-eq nft-contract (get nft-asset-contract listing)) ERR_ASSET_CONTRACT_MISMATCH)
+    
+    ;; Validate the payment contract matches what's in the listing
+    (asserts! (is-eq ft-contract expected-payment-contract) ERR_PAYMENT_CONTRACT_MISMATCH)
+    
     ;; Validate that the purchase can be fulfilled
-    (try! (assert-can-fulfil
-      (contract-of nft-asset-contract)
-      (some (contract-of payment-asset-contract))
-      listing
-    ))
+    (try! (assert-can-fulfil nft-contract (some ft-contract) listing))
+    
+    ;; Verify the token-id is valid (greater than zero)
+    (asserts! (> (get token-id listing) u0) ERR_INVALID_TOKEN_ID)
+    
+    ;; Verify the price is valid before the transfer
+    (asserts! (> (get price listing) u0) ERR_INVALID_PRICE)
+    
     ;; Transfer the NFT to the purchaser (caller of the function)
     (try! (as-contract (transfer-nft nft-asset-contract (get token-id listing) tx-sender taker)))
+    
     ;; Transfer the tokens as payment from the purchaser to the creator of the NFT
     (try! (transfer-ft payment-asset-contract (get price listing) taker (get maker listing)))
+    
     ;; Remove the NFT from the marketplace listings
     (map-delete listings listing-id)
+    
     ;; Return the listing ID that was just purchased
     (ok listing-id)
   )
@@ -171,8 +218,6 @@
 
 (define-private (transfer-ft (ft-contract <ft-trait>) (amount uint) (sender principal) (recipient principal))
   (contract-call? ft-contract transfer amount sender recipient none))
-
-;; ... rest of your contract code ...
 
 (define-private (assert-can-fulfil
   (nft-asset-contract principal)
@@ -207,5 +252,3 @@
     (ok true)
   )
 )
-
-

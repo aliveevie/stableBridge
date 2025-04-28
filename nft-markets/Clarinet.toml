@@ -18,6 +18,18 @@ depends_on = []
 path = 'contracts/nft-market.clar'
 depends_on = ["sip-010-trait-ft-standard", "nft-trait"]
 
+[contracts.mock-nft]
+path = 'contracts/mock-nft.clar'
+depends_on = ["nft-trait"]
+
+[contracts.mock-ft]
+path = 'contracts/mock-ft.clar'
+depends_on = ["sip-010-trait-ft-standard"]
+
+[contracts.mock-ft2]
+path = 'contracts/mock-ft2.clar'
+depends_on = ["sip-010-trait-ft-standard"]
+
 [repl.analysis]
 passes = ['check_checker']
 
