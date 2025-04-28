@@ -1,7 +1,8 @@
 "use client"
-import { motion } from "framer-motion"
+
 import { EthereumLogo } from "./ethereum-logo"
 import { BitcoinLogo } from "./bitcoin-logo"
+import { motion } from "framer-motion"
 
 export function BridgeHero() {
   return (
@@ -15,7 +16,6 @@ export function BridgeHero() {
           </span>
           <span className="block mt-4 text-gray-800">Ethereum to Bitcoin on Stacks</span>
         </h1>
-
         <p className="mx-auto mt-6 max-w-2xl text-xl text-gray-600 sm:text-2xl">
           The most intuitive way to move your assets between blockchains
         </p>
