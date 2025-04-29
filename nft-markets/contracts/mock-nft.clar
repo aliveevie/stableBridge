@@ -9,11 +9,11 @@
 )
 
 (define-read-only (get-token-uri (token-id uint))
-  (ok (some "https://example.com/nft"))
+  (ok (some u"https://example.com/nft"))
 )
 
 (define-read-only (get-owner (token-id uint))
-  (ok (nft-owner? mock-nft token-id))
+  (ok (nft-get-owner? mock-nft token-id))
 )
 
 (define-public (transfer (token-id uint) (sender principal) (recipient principal))
