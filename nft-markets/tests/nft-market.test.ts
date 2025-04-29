@@ -6,47 +6,6 @@ type CallFnResponse = { result: ClarityValue };
 type CallReadOnlyFnResponse = { result: ClarityValue };
 
 // Use module augmentation for @hirosystems/clarinet-sdk
-declare module '@hirosystems/clarinet-sdk' {
-  export interface Simnet {
-    getAccounts(): Map<string, string>;
-    getStxBalance(account: string): { amount: number };
-    mineEmptyBlock(): void;
-    blockHeight: number;
-    callPublicFn(contract: string, method: string, args: ClarityValue[], sender: string): CallFnResponse;
-    callReadOnlyFn(contract: string, method: string, args: ClarityValue[], sender: string): CallReadOnlyFnResponse;
-  }
-}
-
-// Define the global simnet object
-declare global {
-  var simnet: import('@hirosystems/clarinet-sdk').Simnet;
-}
-
-// Define matcher return type with withUint method
-interface WithUintMatcher {
-  withUint(value: number): any;
-}
-
-// Extend the expect interface for Clarity value matchers
-declare global {
-  namespace Vi {
-    interface AsymmetricMatchersContaining {
-      toBeOk(): WithUintMatcher;
-      toBeErr(): WithUintMatcher;
-      toBeTruthy(): any;
-      toBeNone(): any;
-      not: AsymmetricMatchersContaining;
-    }
-    
-    interface Assertion {
-      toBeOk(): WithUintMatcher;
-      toBeErr(): WithUintMatcher;
-      toBeTruthy(): any;
-      toBeNone(): any;
-      not: Assertion;
-    }
-  }
-}
 
 // Get test accounts
 const accounts = simnet.getAccounts();
