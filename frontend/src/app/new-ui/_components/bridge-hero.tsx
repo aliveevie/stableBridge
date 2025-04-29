@@ -1,8 +1,8 @@
 "use client"
 
+import { motion } from "framer-motion"
 import { EthereumLogo } from "./ethereum-logo"
 import { BitcoinLogo } from "./bitcoin-logo"
-import { motion } from "framer-motion"
 
 export function BridgeHero() {
   return (
