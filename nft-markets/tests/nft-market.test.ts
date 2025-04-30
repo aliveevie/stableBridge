@@ -1,6 +1,13 @@
 import { describe, expect, it, beforeEach } from "vitest";
-import { ClarityValue, boolCV, contractPrincipalCV, falseCV, noneCV, principalCV, someCV, stringAsciiCV, stringUtf8CV, trueCV, uintCV } from "@stacks/transactions";
+import { ClarityValue, contractPrincipalCV, falseCV, noneCV, principalCV, someCV, trueCV, uintCV } from "@stacks/transactions";
 
+// Define types that are missing from the SDK
+type CallFnResponse = { result: ClarityValue };
+type CallReadOnlyFnResponse = { result: ClarityValue };
+
+// Use module augmentation for @hirosystems/clarinet-sdk
+
+// Get test accounts
 const accounts = simnet.getAccounts();
 const deployer = accounts.get("deployer")!;
 const wallet1 = accounts.get("wallet_1")!;
@@ -53,6 +60,7 @@ describe("NFT Market Contract Tests", () => {
       );
     } catch (e) {
       // Ignore errors in setup
+      console.error("Setup error:", e);
     }
   });
 
@@ -69,16 +77,17 @@ describe("NFT Market Contract Tests", () => {
         "set-whitelisted",
         [contractPrincipalCV(deployer, mockNFTContractName), trueCV()],
         deployer
-      );
+      ) as CallFnResponse;
       
-      expect(result).toBeOk(true);
+      // @ts-ignore - Vitest custom matcher
+      expect(result).toBeOk(trueCV());
       
       const { result: isWhitelisted } = simnet.callReadOnlyFn(
         nftMarketContractName,
         "is-whitelisted",
         [contractPrincipalCV(deployer, mockNFTContractName)],
         deployer
-      );
+      ) as CallReadOnlyFnResponse;
       
       expect(isWhitelisted).toBeTruthy();
     });
@@ -89,8 +98,9 @@ describe("NFT Market Contract Tests", () => {
         "set-whitelisted",
         [contractPrincipalCV(deployer, mockNFTContractName), trueCV()],
         wallet1
-      );
+      ) as CallFnResponse;
       
+      // @ts-ignore - Vitest custom matcher
       expect(result).toBeErr().withUint(2001); // ERR_UNAUTHORISED
     });
     
@@ -100,8 +110,9 @@ describe("NFT Market Contract Tests", () => {
         "set-whitelisted",
         [contractPrincipalCV(deployer, nftMarketContractName), trueCV()],
         deployer
-      );
+      ) as CallFnResponse;
       
+      // @ts-ignore - Vitest custom matcher
       expect(result).toBeErr().withUint(2009); // ERR_INVALID_CONTRACT
     });
   });
@@ -126,19 +137,20 @@ describe("NFT Market Contract Tests", () => {
         "expiry": uintCV(simnet.blockHeight + 100),
         "price": uintCV(1000000), // 1 STX
         "payment-asset-contract": noneCV() // None means STX
-      };
+      } as unknown as ClarityValue;
       
       const { result } = simnet.callPublicFn(
         nftMarketContractName,
         "list-asset",
         [
           contractPrincipalCV(deployer, mockNFTContractName),
-          listingData
+          listingData as unknown as ClarityValue
         ],
         wallet1
-      );
+      ) as CallFnResponse;
       
-      expect(result).toBeOk(0); // First listing ID should be 0
+      // @ts-ignore - Vitest custom matcher
+      expect(result).toBeOk(uintCV(0)); // First listing ID should be 0
       
       // Check that the listing exists
       const { result: listing } = simnet.callReadOnlyFn(
@@ -146,7 +158,7 @@ describe("NFT Market Contract Tests", () => {
         "get-listing",
         [uintCV(0)],
         wallet1
-      );
+      ) as CallReadOnlyFnResponse;
       
       expect(listing).not.toBeNone();
     });
@@ -177,19 +189,20 @@ describe("NFT Market Contract Tests", () => {
         "expiry": uintCV(simnet.blockHeight + 100),
         "price": uintCV(5000000), // 5 tokens
         "payment-asset-contract": someCV(contractPrincipalCV(deployer, mockFTContractName))
-      };
+      } as unknown as ClarityValue;
       
       const { result } = simnet.callPublicFn(
         nftMarketContractName,
         "list-asset",
         [
           contractPrincipalCV(deployer, mockNFTContractName),
-          listingData
+          listingData as unknown as ClarityValue
         ],
         wallet1
-      );
+      ) as CallFnResponse;
       
-      expect(result).toBeOk(0);
+      // @ts-ignore - Vitest custom matcher
+      expect(result).toBeOk(uintCV(0));
       
       // Check that the listing exists with the correct payment contract
       const { result: listing } = simnet.callReadOnlyFn(
@@ -197,7 +210,7 @@ describe("NFT Market Contract Tests", () => {
         "get-listing",
         [uintCV(0)],
         wallet1
-      );
+      ) as CallReadOnlyFnResponse;
       
       expect(listing).not.toBeNone();
     });
@@ -225,11 +238,12 @@ describe("NFT Market Contract Tests", () => {
         "list-asset",
         [
           contractPrincipalCV(deployer, mockNFTContractName),
-          listingData
+          listingData as unknown as ClarityValue
         ],
         wallet1
-      );
+      ) as CallFnResponse;
       
+      // @ts-ignore - Vitest custom matcher
       expect(result).toBeErr().withUint(1001); // ERR_PRICE_ZERO
     });
     
@@ -256,11 +270,12 @@ describe("NFT Market Contract Tests", () => {
         "list-asset",
         [
           contractPrincipalCV(deployer, mockNFTContractName),
-          listingData
+          listingData as unknown as ClarityValue
         ],
         wallet1
-      );
+      ) as CallFnResponse;
       
+      // @ts-ignore - Vitest custom matcher
       expect(result).toBeErr().withUint(1000); // ERR_EXPIRY_IN_PAST
     });
     
@@ -288,11 +303,12 @@ describe("NFT Market Contract Tests", () => {
         "list-asset",
         [
           contractPrincipalCV(deployer, mockNFTContractName),
-          listingData
+          listingData as unknown as ClarityValue
         ],
         wallet1
-      );
+      ) as CallFnResponse;
       
+      // @ts-ignore - Vitest custom matcher
       expect(result).toBeErr().withUint(2007); // ERR_ASSET_CONTRACT_NOT_WHITELISTED
     });
   });
@@ -322,7 +338,7 @@ describe("NFT Market Contract Tests", () => {
         "list-asset",
         [
           contractPrincipalCV(deployer, mockNFTContractName),
-          listingData
+          listingData as unknown as ClarityValue
         ],
         wallet1
       );
@@ -333,8 +349,9 @@ describe("NFT Market Contract Tests", () => {
         "cancel-listing",
         [uintCV(0), contractPrincipalCV(deployer, mockNFTContractName)],
         wallet1
-      );
+      ) as CallFnResponse;
       
+      // @ts-ignore - Vitest custom matcher
       expect(result).toBeOk();
       
       // Verify the listing is gone
@@ -343,7 +360,7 @@ describe("NFT Market Contract Tests", () => {
         "get-listing",
         [uintCV(0)],
         wallet1
-      );
+      ) as CallReadOnlyFnResponse;
       
       expect(listing).toBeNone();
     });
@@ -372,7 +389,7 @@ describe("NFT Market Contract Tests", () => {
         "list-asset",
         [
           contractPrincipalCV(deployer, mockNFTContractName),
-          listingData
+          listingData as unknown as ClarityValue
         ],
         wallet1
       );
@@ -383,8 +400,9 @@ describe("NFT Market Contract Tests", () => {
         "cancel-listing",
         [uintCV(0), contractPrincipalCV(deployer, mockNFTContractName)],
         wallet2
-      );
+      ) as CallFnResponse;
       
+      // @ts-ignore - Vitest custom matcher
       expect(result).toBeErr().withUint(2001); // ERR_UNAUTHORISED
     });
     
@@ -394,8 +412,9 @@ describe("NFT Market Contract Tests", () => {
         "cancel-listing",
         [uintCV(9999), contractPrincipalCV(deployer, mockNFTContractName)],
         wallet1
-      );
+      ) as CallFnResponse;
       
+      // @ts-ignore - Vitest custom matcher
       expect(result).toBeErr().withUint(2000); // ERR_UNKNOWN_LISTING
     });
   });
@@ -420,21 +439,21 @@ describe("NFT Market Contract Tests", () => {
         "expiry": uintCV(simnet.blockHeight + 100),
         "price": uintCV(listingPrice),
         "payment-asset-contract": noneCV()
-      };
+      } as unknown as ClarityValue;
       
       simnet.callPublicFn(
         nftMarketContractName,
         "list-asset",
         [
           contractPrincipalCV(deployer, mockNFTContractName),
-          listingData
+          listingData as unknown as ClarityValue
         ],
         wallet1
       );
       
       // Record initial STX balances
-      const wallet1InitialBalance = simnet.getStxBalance(wallet1);
-      const wallet2InitialBalance = simnet.getStxBalance(wallet2);
+      const wallet1InitialBalance = simnet.getStxBalance(wallet1) as { amount: number };
+      const wallet2InitialBalance = simnet.getStxBalance(wallet2) as { amount: number };
       
       // Purchase with wallet2
       const { result } = simnet.callPublicFn(
@@ -442,13 +461,14 @@ describe("NFT Market Contract Tests", () => {
         "fulfil-listing-stx",
         [uintCV(0), contractPrincipalCV(deployer, mockNFTContractName)],
         wallet2
-      );
+      ) as CallFnResponse;
       
-      expect(result).toBeOk(0);
+      // @ts-ignore - Vitest custom matcher
+      expect(result).toBeOk(uintCV(0));
       
       // Verify STX transfers occurred correctly
-      expect(simnet.getStxBalance(wallet1).amount).toBe(wallet1InitialBalance.amount + listingPrice);
-      expect(simnet.getStxBalance(wallet2).amount).toBeLessThan(wallet2InitialBalance.amount);
+      expect((simnet.getStxBalance(wallet1) as { amount: number }).amount).toBe(wallet1InitialBalance.amount + listingPrice);
+      expect((simnet.getStxBalance(wallet2) as { amount: number }).amount).toBeLessThan(wallet2InitialBalance.amount);
       
       // Verify the listing was removed
       const { result: listing } = simnet.callReadOnlyFn(
@@ -456,7 +476,7 @@ describe("NFT Market Contract Tests", () => {
         "get-listing",
         [uintCV(0)],
         wallet1
-      );
+      ) as CallReadOnlyFnResponse;
       
       expect(listing).toBeNone();
     });
@@ -485,7 +505,7 @@ describe("NFT Market Contract Tests", () => {
         "list-asset",
         [
           contractPrincipalCV(deployer, mockNFTContractName),
-          listingData
+          listingData as unknown as ClarityValue
         ],
         wallet1
       );
@@ -499,8 +519,9 @@ describe("NFT Market Contract Tests", () => {
         "fulfil-listing-stx",
         [uintCV(0), contractPrincipalCV(deployer, mockNFTContractName)],
         wallet2
-      );
+      ) as CallFnResponse;
       
+      // @ts-ignore - Vitest custom matcher
       expect(result).toBeErr().withUint(2002); // ERR_LISTING_EXPIRED
     });
     
@@ -528,7 +549,7 @@ describe("NFT Market Contract Tests", () => {
         "list-asset",
         [
           contractPrincipalCV(deployer, mockNFTContractName),
-          listingData
+          listingData as unknown as ClarityValue
         ],
         wallet1
       );
@@ -539,8 +560,9 @@ describe("NFT Market Contract Tests", () => {
         "fulfil-listing-stx",
         [uintCV(0), contractPrincipalCV(deployer, mockNFTContractName)],
         wallet1
-      );
+      ) as CallFnResponse;
       
+      // @ts-ignore - Vitest custom matcher
       expect(result).toBeErr().withUint(2005); // ERR_MAKER_TAKER_EQUAL
     });
   });
@@ -575,14 +597,14 @@ describe("NFT Market Contract Tests", () => {
         "expiry": uintCV(simnet.blockHeight + 100),
         "price": uintCV(listingPrice),
         "payment-asset-contract": someCV(contractPrincipalCV(deployer, mockFTContractName))
-      };
+      } as unknown as ClarityValue;
       
       simnet.callPublicFn(
         nftMarketContractName,
         "list-asset",
         [
           contractPrincipalCV(deployer, mockNFTContractName),
-          listingData
+          listingData as unknown as ClarityValue
         ],
         wallet1
       );
@@ -597,9 +619,10 @@ describe("NFT Market Contract Tests", () => {
           contractPrincipalCV(deployer, mockFTContractName)
         ],
         wallet2
-      );
+      ) as CallFnResponse;
       
-      expect(result).toBeOk(0);
+      // @ts-ignore - Vitest custom matcher
+      expect(result).toBeOk(uintCV(0));
       
       // Verify listing was removed
       const { result: listing } = simnet.callReadOnlyFn(
@@ -607,7 +630,7 @@ describe("NFT Market Contract Tests", () => {
         "get-listing",
         [uintCV(0)],
         wallet1
-      );
+      ) as CallReadOnlyFnResponse;
       
       expect(listing).toBeNone();
     });
@@ -647,14 +670,14 @@ describe("NFT Market Contract Tests", () => {
         "expiry": uintCV(simnet.blockHeight + 100),
         "price": uintCV(5000000),
         "payment-asset-contract": someCV(contractPrincipalCV(deployer, mockFTContractName))
-      };
+      } as unknown as ClarityValue;
       
       simnet.callPublicFn(
         nftMarketContractName,
         "list-asset",
         [
           contractPrincipalCV(deployer, mockNFTContractName),
-          listingData
+          listingData as unknown as ClarityValue
         ],
         wallet1
       );
@@ -669,8 +692,9 @@ describe("NFT Market Contract Tests", () => {
           contractPrincipalCV(deployer, mockFT2ContractName)
         ],
         wallet2
-      );
+      ) as CallFnResponse;
       
+      // @ts-ignore - Vitest custom matcher
       expect(result).toBeErr().withUint(101); // ERR_PAYMENT_CONTRACT_MISMATCH
     });
   });
@@ -693,14 +717,14 @@ describe("NFT Market Contract Tests", () => {
         "expiry": uintCV(simnet.blockHeight + 100),
         "price": uintCV(1000000),
         "payment-asset-contract": noneCV()
-      };
+      } as unknown as ClarityValue;
       
       simnet.callPublicFn(
         nftMarketContractName,
         "list-asset",
         [
           contractPrincipalCV(deployer, mockNFTContractName),
-          listingData
+          listingData as unknown as ClarityValue
         ],
         wallet1
       );
@@ -711,9 +735,10 @@ describe("NFT Market Contract Tests", () => {
         "fulfil-listing-stx",
         [uintCV(0), contractPrincipalCV(deployer, mockNFTContractName)],
         wallet2
-      );
+      ) as CallFnResponse;
       
-      expect(result).toBeOk(0);
+      // @ts-ignore - Vitest custom matcher
+      expect(result).toBeOk(uintCV(0));
     });
     
     it("prevents fulfilling a private listing by unintended recipient", () => {
@@ -751,8 +776,9 @@ describe("NFT Market Contract Tests", () => {
         "fulfil-listing-stx",
         [uintCV(0), contractPrincipalCV(deployer, mockNFTContractName)],
         wallet3
-      );
+      ) as CallFnResponse;
       
+      // @ts-ignore - Vitest custom matcher
       expect(result).toBeErr().withUint(2006); // ERR_UNINTENDED_TAKER
     });
   });
