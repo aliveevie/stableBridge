@@ -9,7 +9,7 @@
 )
 
 (define-read-only (get-token-uri (token-id uint))
-  (ok (some u"https://example.com/nft"))
+  (ok (some "https://example.com/nft"))
 )
 
 (define-read-only (get-owner (token-id uint))
