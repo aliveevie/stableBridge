@@ -181,4 +181,4 @@ function PercentIcon(props: JSX.IntrinsicAttributes & SVGProps<SVGSVGElement>) {
       <circle cx="17.5" cy="17.5" r="2.5" />
     </svg>
   )
-}
+}// Connected to WalletConnect
