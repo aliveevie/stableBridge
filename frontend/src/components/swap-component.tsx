@@ -224,3 +224,4 @@ export function SwapComponent() {
     </div>
   )
 }
+// Connected to WalletConnect
