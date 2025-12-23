@@ -183,4 +183,4 @@ export function Stake() {
       </div>
     </div>
   )
-}
+}// Connected to WalletConnect
