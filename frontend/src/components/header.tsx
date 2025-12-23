@@ -6,224 +6,229 @@ import { Button } from "@/components/ui/button"
 import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet"
 import { useEffect, useState } from "react";
 import { disconnect } from "@stacks/connect";
-import { WalletConnectButton } from "./wallet";
+import { WalletConnectButton, WalletBalance } from "./wallet";
 import { WalletConnectMobile } from "./walletMobile";
 import { ClientProvider } from "@micro-stacks/react";
 import BuySTX from "./buySTX";
 
 type HeaderProps = {
-  connectWallet: () => any; 
+  connectWallet: () => any;
   userData: any;
 };
 
 export function Header() {
 
-  const [ connect, setConnect ] = useState("Connect Wallet");
+  const [connect, setConnect] = useState("Connect Wallet");
 
-  function disconnectWallet(){
-      disconnect();
-      console.log("you are clicking and NOT Working!")
+  function disconnectWallet() {
+    disconnect();
+    console.log("you are clicking and NOT Working!")
   }
-  
+
   return (
-     
-        <header className="sticky top-0 z-50 w-full shadow-sm">
-        <div className="container flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
-          <Link href="/" className="flex items-center gap-2" prefetch={false}>
-            <SignpostIcon className="h-6 w-6 bg-gradient-to-r from-[#FF6B6B] via-[#FFA500] to-[#FFD700] bg-clip-text text-transparent" />
-            <span className="text-lg font-semibold bg-gradient-to-r from-[#9B59B6] via-[#3498DB] to-[#1ABC9C] bg-clip-text text-transparent">
-              StableBridge
-            </span>
+
+    <header className="sticky top-0 z-50 w-full shadow-sm">
+      <div className="container flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
+        <Link href="/" className="flex items-center gap-2" prefetch={false}>
+          <SignpostIcon className="h-6 w-6 bg-gradient-to-r from-[#FF6B6B] via-[#FFA500] to-[#FFD700] bg-clip-text text-transparent" />
+          <span className="text-lg font-semibold bg-gradient-to-r from-[#9B59B6] via-[#3498DB] to-[#1ABC9C] bg-clip-text text-transparent">
+            StableBridge
+          </span>
+        </Link>
+        <nav className="hidden items-center gap-6 md:flex">
+          <Link
+            href="/"
+            className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+            prefetch={false}
+          >
+            Home
           </Link>
-          <nav className="hidden items-center gap-6 md:flex">
-            <Link
-              href="/"
-              className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
-              prefetch={false}
-            >
-              Home
-            </Link>
-            <Link
-              href="#"
-              className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
-              prefetch={false}
-            >
-              About
-            </Link>
-            <NavigationMenu>
-              <NavigationMenuList>
-                <NavigationMenuItem>
-                  <NavigationMenuTrigger className="flex items-center gap-1 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground">
-                    Products
-                    <ChevronDownIcon className="h-4 w-4" />
-                  </NavigationMenuTrigger>
-                  <NavigationMenuContent>
-                    <div className="grid w-[200px] gap-2 p-2">
-                      <NavigationMenuLink asChild>
-                        <Link
-                          href="/swap"
-                          className="group flex items-center justify-between rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50"
-                          prefetch={false}
-                        >
-                          Swap
-                          <ArrowRightIcon className="h-4 w-4 opacity-0 transition-opacity group-hover:opacity-100" />
-                        </Link>
-                      </NavigationMenuLink>
-                      <NavigationMenuLink asChild>
-                        <Link
-                          href="/bridge"
-                          className="group flex items-center justify-between rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50"
-                          prefetch={false}
-                        >
-                          Bridge
-                          <ArrowRightIcon className="h-4 w-4 opacity-0 transition-opacity group-hover:opacity-100" />
-                        </Link>
-                      </NavigationMenuLink>
-                      <NavigationMenuLink asChild>
-                        <Link
-                          href="/pool"
-                          className="group flex items-center justify-between rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50"
-                          prefetch={false}
-                        >
-                          Pools
-                          <ArrowRightIcon className="h-4 w-4 opacity-0 transition-opacity group-hover:opacity-100" />
-                        </Link>
-                      </NavigationMenuLink>
-                      <NavigationMenuLink asChild>
-                        <Link
-                          href="/stake"
-                          className="group flex items-center justify-between rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50"
-                          prefetch={false}
-                        >
-                          Stake
-                          <ArrowRightIcon className="h-4 w-4 opacity-0 transition-opacity group-hover:opacity-100" />
-                        </Link>
-                      </NavigationMenuLink>
-                      <NavigationMenuLink asChild>
-                        <Link
-                          href="/buySTX"
-                          className="group flex items-center justify-between rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50"
-                          prefetch={false}
-                        >
-                          Buy STX
-                          <ArrowRightIcon className="h-4 w-4 opacity-0 transition-opacity group-hover:opacity-100" />
-                        </Link>
-                      </NavigationMenuLink>
-                      <NavigationMenuLink asChild>
-                        <Link
-                          href="/mint-nft"
-                          className="group flex items-center justify-between rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50"
-                          prefetch={false}
-                        >
-                          Mint NFT
-                          <ArrowRightIcon className="h-4 w-4 opacity-0 transition-opacity group-hover:opacity-100" />
-                        </Link>
-                      </NavigationMenuLink>
-                    </div>
-                  </NavigationMenuContent>
-                </NavigationMenuItem>
-              </NavigationMenuList>
-            </NavigationMenu>
-            <Link
-              href="#"
-              className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
-              prefetch={false}
-            >
-              Contact
-            </Link>
-          </nav>
-          <WalletConnectButton />
-          <Sheet>
-            <SheetTrigger asChild>
-              <Button variant="outline" size="icon" className="md:hidden">
-                <MenuIcon className="h-6 w-6" />
-                <span className="sr-only">Toggle Menu</span>
-              </Button>
-            </SheetTrigger>
-            <SheetContent side="right" className="sm:max-w-xs">
-              <nav className="grid gap-4 p-4 text-sm font-medium">
-                <Link
-                  href="#"
-                  className="flex items-center gap-2 text-muted-foreground transition-colors hover:text-foreground"
-                  prefetch={false}
-                >
-                  <HomeIcon className="h-5 w-5" />
-                  Home
-                </Link>
-                <Link
-                  href="#"
-                  className="flex items-center gap-2 text-muted-foreground transition-colors hover:text-foreground"
-                  prefetch={false}
-                >
-                  <InfoIcon className="h-5 w-5" />
-                  About
-                </Link>
-                <div className="grid gap-2">
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    className="flex items-center justify-between text-muted-foreground transition-colors hover:text-foreground"
-                  >
-                    <span className="flex items-center gap-2">
-                      <PackageIcon className="h-5 w-5" />
-                      Products
-                    </span>
-                    <ChevronDownIcon className="h-4 w-4" />
-                  </Button>
-                  <div className="grid gap-2 pl-6">
-                    <Link
-                      href="#"
-                      className="flex items-center gap-2 text-muted-foreground transition-colors hover:text-foreground"
-                      prefetch={false}
-                    >
-                      <ShuffleIcon className="h-5 w-5" />
-                      Swap
-                    </Link>
-                    <Link
-                      href="#"
-                      className="flex items-center gap-2 text-muted-foreground transition-colors hover:text-foreground"
-                      prefetch={false}
-                    >
-                      <BracketsIcon className="h-5 w-5" />
-                      Bridge
-                    </Link>
-                    <Link
-                      href="#"
-                      className="flex items-center gap-2 text-muted-foreground transition-colors hover:text-foreground"
-                      prefetch={false}
-                    >
-                      <CoinsIcon className="h-5 w-5" />
-                      Pools
-                    </Link>
-                    <Link
-                      href="#"
-                      className="flex items-center gap-2 text-muted-foreground transition-colors hover:text-foreground"
-                      prefetch={false}
-                    >
-                      <StickerIcon className="h-5 w-5" />
-                      Stake
-                    </Link>
+          <Link
+            href="#"
+            className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+            prefetch={false}
+          >
+            About
+          </Link>
+          <NavigationMenu>
+            <NavigationMenuList>
+              <NavigationMenuItem>
+                <NavigationMenuTrigger className="flex items-center gap-1 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground">
+                  Products
+                  <ChevronDownIcon className="h-4 w-4" />
+                </NavigationMenuTrigger>
+                <NavigationMenuContent>
+                  <div className="grid w-[200px] gap-2 p-2">
+                    <NavigationMenuLink asChild>
+                      <Link
+                        href="/swap"
+                        className="group flex items-center justify-between rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50"
+                        prefetch={false}
+                      >
+                        Swap
+                        <ArrowRightIcon className="h-4 w-4 opacity-0 transition-opacity group-hover:opacity-100" />
+                      </Link>
+                    </NavigationMenuLink>
+                    <NavigationMenuLink asChild>
+                      <Link
+                        href="/bridge"
+                        className="group flex items-center justify-between rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50"
+                        prefetch={false}
+                      >
+                        Bridge
+                        <ArrowRightIcon className="h-4 w-4 opacity-0 transition-opacity group-hover:opacity-100" />
+                      </Link>
+                    </NavigationMenuLink>
+                    <NavigationMenuLink asChild>
+                      <Link
+                        href="/pool"
+                        className="group flex items-center justify-between rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50"
+                        prefetch={false}
+                      >
+                        Pools
+                        <ArrowRightIcon className="h-4 w-4 opacity-0 transition-opacity group-hover:opacity-100" />
+                      </Link>
+                    </NavigationMenuLink>
+                    <NavigationMenuLink asChild>
+                      <Link
+                        href="/stake"
+                        className="group flex items-center justify-between rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50"
+                        prefetch={false}
+                      >
+                        Stake
+                        <ArrowRightIcon className="h-4 w-4 opacity-0 transition-opacity group-hover:opacity-100" />
+                      </Link>
+                    </NavigationMenuLink>
+                    <NavigationMenuLink asChild>
+                      <Link
+                        href="/buySTX"
+                        className="group flex items-center justify-between rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50"
+                        prefetch={false}
+                      >
+                        Buy STX
+                        <ArrowRightIcon className="h-4 w-4 opacity-0 transition-opacity group-hover:opacity-100" />
+                      </Link>
+                    </NavigationMenuLink>
+                    <NavigationMenuLink asChild>
+                      <Link
+                        href="/mint-nft"
+                        className="group flex items-center justify-between rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50"
+                        prefetch={false}
+                      >
+                        Mint NFT
+                        <ArrowRightIcon className="h-4 w-4 opacity-0 transition-opacity group-hover:opacity-100" />
+                      </Link>
+                    </NavigationMenuLink>
                   </div>
-                </div>
-                <Link
-                  href="#"
-                  className="flex items-center gap-2 text-muted-foreground transition-colors hover:text-foreground"
-                  prefetch={false}
-                >
-                  <ContactIcon className="h-5 w-5" />
-                  Contact
-                </Link>
-                <WalletConnectMobile />
-              </nav>
-            </SheetContent>
-          </Sheet>
+                </NavigationMenuContent>
+              </NavigationMenuItem>
+            </NavigationMenuList>
+          </NavigationMenu>
+          <Link
+            href="#"
+            className="text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+            prefetch={false}
+          >
+            Contact
+          </Link>
+        </nav>
+        <div className="flex items-center gap-4">
+          <div className="hidden lg:block">
+            <WalletBalance />
+          </div>
+          <WalletConnectButton />
         </div>
-      </header>
+        <Sheet>
+          <SheetTrigger asChild>
+            <Button variant="outline" size="icon" className="md:hidden">
+              <MenuIcon className="h-6 w-6" />
+              <span className="sr-only">Toggle Menu</span>
+            </Button>
+          </SheetTrigger>
+          <SheetContent side="right" className="sm:max-w-xs">
+            <nav className="grid gap-4 p-4 text-sm font-medium">
+              <Link
+                href="#"
+                className="flex items-center gap-2 text-muted-foreground transition-colors hover:text-foreground"
+                prefetch={false}
+              >
+                <HomeIcon className="h-5 w-5" />
+                Home
+              </Link>
+              <Link
+                href="#"
+                className="flex items-center gap-2 text-muted-foreground transition-colors hover:text-foreground"
+                prefetch={false}
+              >
+                <InfoIcon className="h-5 w-5" />
+                About
+              </Link>
+              <div className="grid gap-2">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="flex items-center justify-between text-muted-foreground transition-colors hover:text-foreground"
+                >
+                  <span className="flex items-center gap-2">
+                    <PackageIcon className="h-5 w-5" />
+                    Products
+                  </span>
+                  <ChevronDownIcon className="h-4 w-4" />
+                </Button>
+                <div className="grid gap-2 pl-6">
+                  <Link
+                    href="#"
+                    className="flex items-center gap-2 text-muted-foreground transition-colors hover:text-foreground"
+                    prefetch={false}
+                  >
+                    <ShuffleIcon className="h-5 w-5" />
+                    Swap
+                  </Link>
+                  <Link
+                    href="#"
+                    className="flex items-center gap-2 text-muted-foreground transition-colors hover:text-foreground"
+                    prefetch={false}
+                  >
+                    <BracketsIcon className="h-5 w-5" />
+                    Bridge
+                  </Link>
+                  <Link
+                    href="#"
+                    className="flex items-center gap-2 text-muted-foreground transition-colors hover:text-foreground"
+                    prefetch={false}
+                  >
+                    <CoinsIcon className="h-5 w-5" />
+                    Pools
+                  </Link>
+                  <Link
+                    href="#"
+                    className="flex items-center gap-2 text-muted-foreground transition-colors hover:text-foreground"
+                    prefetch={false}
+                  >
+                    <StickerIcon className="h-5 w-5" />
+                    Stake
+                  </Link>
+                </div>
+              </div>
+              <Link
+                href="#"
+                className="flex items-center gap-2 text-muted-foreground transition-colors hover:text-foreground"
+                prefetch={false}
+              >
+                <ContactIcon className="h-5 w-5" />
+                Contact
+              </Link>
+              <WalletConnectMobile />
+            </nav>
+          </SheetContent>
+        </Sheet>
+      </div>
+    </header>
 
   )
 }
 
-function ArrowRightIcon(props:any) {
+function ArrowRightIcon(props: any) {
   return (
     <svg
       {...props}
@@ -244,7 +249,7 @@ function ArrowRightIcon(props:any) {
 }
 
 
-function BracketsIcon(props:any) {
+function BracketsIcon(props: any) {
   return (
     <svg
       {...props}
@@ -265,7 +270,7 @@ function BracketsIcon(props:any) {
 }
 
 
-function ChevronDownIcon(props:any) {
+function ChevronDownIcon(props: any) {
   return (
     <svg
       {...props}
@@ -285,7 +290,7 @@ function ChevronDownIcon(props:any) {
 }
 
 
-function CoinsIcon(props:any) {
+function CoinsIcon(props: any) {
   return (
     <svg
       {...props}
@@ -308,7 +313,7 @@ function CoinsIcon(props:any) {
 }
 
 
-function ContactIcon(props:any) {
+function ContactIcon(props: any) {
   return (
     <svg
       {...props}
@@ -332,7 +337,7 @@ function ContactIcon(props:any) {
 }
 
 
-function HomeIcon(props:any) {
+function HomeIcon(props: any) {
   return (
     <svg
       {...props}
@@ -353,7 +358,7 @@ function HomeIcon(props:any) {
 }
 
 
-function InfoIcon(props:any) {
+function InfoIcon(props: any) {
   return (
     <svg
       {...props}
@@ -375,7 +380,7 @@ function InfoIcon(props:any) {
 }
 
 
-function MenuIcon(props:any) {
+function MenuIcon(props: any) {
   return (
     <svg
       {...props}
@@ -397,7 +402,7 @@ function MenuIcon(props:any) {
 }
 
 
-function PackageIcon(props:any) {
+function PackageIcon(props: any) {
   return (
     <svg
       {...props}
@@ -420,7 +425,7 @@ function PackageIcon(props:any) {
 }
 
 
-function ShuffleIcon(props:any) {
+function ShuffleIcon(props: any) {
   return (
     <svg
       {...props}
@@ -444,7 +449,7 @@ function ShuffleIcon(props:any) {
 }
 
 
-function SignpostIcon(props:any) {
+function SignpostIcon(props: any) {
   return (
     <svg
       {...props}
@@ -466,7 +471,7 @@ function SignpostIcon(props:any) {
 }
 
 
-function StickerIcon(props:any) {
+function StickerIcon(props: any) {
   return (
     <svg
       {...props}
@@ -490,7 +495,7 @@ function StickerIcon(props:any) {
 }
 
 
-function XIcon(props:any) {
+function XIcon(props: any) {
   return (
     <svg
       {...props}
