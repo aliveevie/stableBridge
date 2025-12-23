@@ -106,3 +106,4 @@ const Page = () => {
 
 export default Page;
 
+// Connected to WalletConnect
