@@ -23,7 +23,7 @@
 )
 
 (define-read-only (get-token-uri)
-  (ok (some "https://example.com/ft-metadata"))
+  (ok (some u"https://example.com/ft-metadata"))
 )
 
 (define-public (transfer (amount uint) (sender principal) (recipient principal) (memo (optional (buff 34))))
