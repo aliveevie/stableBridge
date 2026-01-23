@@ -7,6 +7,7 @@ export const UserContext = createContext();
 export const UserProvider = ({ children }) => {
   const [userData, setUserData] = useState(null);
   const [tokens, setTokens] = useState([]);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchTokens = async () => {
@@ -24,7 +25,7 @@ export const UserProvider = ({ children }) => {
 
 
   return (
-    <UserContext.Provider value={{ userData, setUserData, tokens, setTokens }}>
+    <UserContext.Provider value={{ userData, setUserData, tokens, setTokens, error }}>
       {children}
     </UserContext.Provider>
   );

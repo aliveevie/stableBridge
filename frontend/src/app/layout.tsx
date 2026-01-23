@@ -6,6 +6,7 @@ import { Header } from "@/components/header";
 import Footer from "@/components/footer";
 import { UserProvider } from "@/components/userContext";
 import { WalletConnectProvider } from "@/contexts/WalletConnectContext";
+import { Toaster } from "@/components/ui/toaster";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -27,6 +28,7 @@ export default function RootLayout({
           <UserProvider>
             <Header />
             {children}
+            <Toaster />
             <Footer />
           </UserProvider>
         </WalletConnectProvider>
