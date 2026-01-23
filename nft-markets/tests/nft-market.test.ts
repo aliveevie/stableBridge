@@ -60,6 +60,28 @@ describe("NFT Market Contract Tests", () => {
     it("ensures contracts are deployed and simnet is initialized", () => {
       expect(simnet.blockHeight).toBeDefined();
     });
+
+    it("exposes the current listing nonce", () => {
+      const { result } = simnet.callReadOnlyFn(
+        nftMarketContractName,
+        "get-listing-nonce",
+        [],
+        deployer
+      );
+
+      expect((result as any).value).toBe(0n);
+    });
+
+    it("exposes the contract owner", () => {
+      const { result } = simnet.callReadOnlyFn(
+        nftMarketContractName,
+        "get-contract-owner",
+        [],
+        deployer
+      );
+
+      expect((result as any).address).toBe(deployer);
+    });
   });
 
   describe("Whitelisting", () => {

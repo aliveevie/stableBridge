@@ -124,14 +124,11 @@
 ;; Fix the set-whitelisted function
 (define-public (set-whitelisted (asset-contract principal) (whitelisted bool))
   (begin
-    ;; Only check that the caller is authorized
     (asserts! (is-eq contract-owner tx-sender) ERR_UNAUTHORISED)
-    
-    ;; This is the key fix: use a simple version without try!
-    ;; Instead of returning bool, we'll return a response type
-    (if (is-eq asset-contract tx-sender)
-      ERR_INVALID_CONTRACT
-      (ok (map-set whitelisted-asset-contracts asset-contract whitelisted))
+    (let ((self (as-contract tx-sender)))
+      (asserts! (not (is-eq asset-contract self)) ERR_INVALID_CONTRACT)
+      (map-set whitelisted-asset-contracts asset-contract whitelisted)
+      (ok true)
     )
   )
 )
@@ -167,6 +164,14 @@
     ;; Return the listing ID that was just purchased
     (ok listing-id)
   )
+)
+
+(define-read-only (get-listing-nonce)
+  (var-get listing-nonce)
+)
+
+(define-read-only (get-contract-owner)
+  contract-owner
 )
 
 ;; Define error constants
