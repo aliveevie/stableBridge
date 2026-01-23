@@ -5,12 +5,14 @@
  * It defines the project metadata, network settings, and wallet options.
  */
 
-import { StacksMainnet, StacksTestnet } from '@stacks/network';
+import { STACKS_MAINNET, STACKS_TESTNET, createNetwork } from '@stacks/network';
 
 // Get environment variables
 export const WALLETCONNECT_PROJECT_ID = process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID || '';
 export const STACKS_NETWORK = process.env.NEXT_PUBLIC_STACKS_NETWORK || 'mainnet';
-export const STACKS_API_URL = process.env.NEXT_PUBLIC_STACKS_API_URL || 'https://api.mainnet.hiro.so';
+export const STACKS_API_URL =
+  process.env.NEXT_PUBLIC_STACKS_API_URL ||
+  (STACKS_NETWORK === 'mainnet' ? 'https://api.mainnet.hiro.so' : 'https://api.testnet.hiro.so');
 
 // Application metadata for wallet display
 export const APP_METADATA = {
@@ -22,9 +24,8 @@ export const APP_METADATA = {
 
 // Network configuration
 export const getStacksNetwork = () => {
-  return STACKS_NETWORK === 'mainnet' 
-    ? new StacksMainnet({ url: STACKS_API_URL })
-    : new StacksTestnet();
+  const network = STACKS_NETWORK === 'mainnet' ? STACKS_MAINNET : STACKS_TESTNET;
+  return createNetwork({ network, client: { baseUrl: STACKS_API_URL } });
 };
 
 // Supported Stacks wallets

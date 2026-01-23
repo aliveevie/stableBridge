@@ -2,8 +2,6 @@
  * Stacks-specific type definitions
  */
 
-import { StacksTransaction } from '@stacks/transactions';
-
 export interface StacksTransactionPayload {
     txType: 'contract_call' | 'token_transfer' | 'smart_contract';
     contractAddress?: string;

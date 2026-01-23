@@ -4,16 +4,6 @@
  * Provides functions for creating and signing Stacks transactions
  */
 
-import {
-    makeSTXTokenTransfer,
-    makeContractCall,
-    broadcastTransaction,
-    AnchorMode,
-    PostConditionMode,
-    FungibleConditionCode,
-    makeStandardSTXPostCondition,
-    createAssetInfo,
-} from '@stacks/transactions';
 import { StacksTransactionPayload, TransactionOptions } from '@/types/stacks';
 import { NETWORK_CONFIG } from '@/lib/walletconnect/config';
 import { openContractCall, openSTXTransfer } from '@stacks/connect';

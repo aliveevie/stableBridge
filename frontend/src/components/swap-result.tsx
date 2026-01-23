@@ -1,40 +1,34 @@
 "use client"
 
-import React, { useState, useEffect } from 'react'
-import { SwapType, VelarSDK, getTokens, ISwapService, SwapResponse, AmountOutResponse } from '@velarprotocol/velar-sdk'
+import React, { useState } from 'react'
+import { SwapType, VelarSDK, Tokens, ISwapService, SwapResponse, AmountOutResponse } from '@velarprotocol/velar-sdk'
 import { openContractCall } from '@stacks/connect'
 import { AnchorMode } from '@stacks/transactions'
+import { NETWORK_CONFIG, APP_METADATA } from '@/lib/walletconnect/config'
+import { useWalletConnect } from '@/hooks/useWalletConnect'
 
 const SwapResult = () => {
-  const [inToken, setInToken] = useState('')
-  const [outToken, setOutToken] = useState('')
+  const { isConnected, address, connect } = useWalletConnect()
+  const [inToken, setInToken] = useState(Tokens.VELAR)
+  const [outToken, setOutToken] = useState(Tokens.STX)
   const [amount, setAmount] = useState(10)
   const [amountOut, setAmountOut] = useState<number | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
-
-  useEffect(() => {
-    const initializeTokens = async () => {
-      try {
-        const { VELAR, STX } = await getTokens()
-        setInToken(VELAR)
-        setOutToken(STX)
-      } catch (err) {
-        setError('Failed to initialize tokens')
-        console.error(err)
-      }
-    }
-
-    initializeTokens()
-  }, [])
 
   const handleSwap = async () => {
     setIsLoading(true)
     setError(null)
 
     try {
+      if (!isConnected || !address) {
+        setError('Connect your wallet to swap.')
+        await connect()
+        return
+      }
+
       const sdk = new VelarSDK()
-      const account = '' // You should replace this with the actual account
+      const account = address
 
       const swapInstance: ISwapService = await sdk.getSwapInstance({
         account: account,
@@ -47,7 +41,7 @@ const SwapResult = () => {
         amount: amount,
       })
 
-      setAmountOut(amountOutResponse.amount)
+      setAmountOut(Number(amountOutResponse.value))
 
       const swapOptions: SwapResponse = await swapInstance.swap({
         amount: amount,
@@ -56,10 +50,10 @@ const SwapResult = () => {
 
       const options = {
         ...swapOptions,
-        network: 'mainnet', // Replace with actual network
+        network: NETWORK_CONFIG.network,
         appDetails: {
-          name: 'My Swap App',
-          icon: 'https://example.com/icon.png',
+          name: APP_METADATA.name,
+          icon: APP_METADATA.icons[0],
         },
         anchorMode: AnchorMode.Any,
         onFinish: (data: any) => {
@@ -70,7 +64,7 @@ const SwapResult = () => {
         },
       }
 
-      await openContractCall(options)
+      await openContractCall(options as any)
     } catch (err) {
       setError('Failed to perform swap')
       console.error(err)
