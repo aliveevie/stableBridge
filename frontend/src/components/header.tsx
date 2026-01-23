@@ -4,26 +4,10 @@ import Link from "next/link"
 import { NavigationMenu, NavigationMenuList, NavigationMenuItem, NavigationMenuTrigger, NavigationMenuContent, NavigationMenuLink } from "@/components/ui/navigation-menu"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet"
-import { useEffect, useState } from "react";
-import { disconnect } from "@stacks/connect";
-import { WalletConnectButton, WalletBalance } from "./wallet";
+import { WalletConnectButton, WalletBalance } from "@/components/wallet/index";
 import { WalletConnectMobile } from "./walletMobile";
-import { ClientProvider } from "@micro-stacks/react";
-import BuySTX from "./buySTX";
-
-type HeaderProps = {
-  connectWallet: () => any;
-  userData: any;
-};
 
 export function Header() {
-
-  const [connect, setConnect] = useState("Connect Wallet");
-
-  function disconnectWallet() {
-    disconnect();
-    console.log("you are clicking and NOT Working!")
-  }
 
   return (
 
@@ -119,6 +103,16 @@ export function Header() {
                         <ArrowRightIcon className="h-4 w-4 opacity-0 transition-opacity group-hover:opacity-100" />
                       </Link>
                     </NavigationMenuLink>
+                    <NavigationMenuLink asChild>
+                      <Link
+                        href="/nft-market"
+                        className="group flex items-center justify-between rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50"
+                        prefetch={false}
+                      >
+                        NFT Market
+                        <ArrowRightIcon className="h-4 w-4 opacity-0 transition-opacity group-hover:opacity-100" />
+                      </Link>
+                    </NavigationMenuLink>
                   </div>
                 </NavigationMenuContent>
               </NavigationMenuItem>
@@ -177,7 +171,7 @@ export function Header() {
                 </Button>
                 <div className="grid gap-2 pl-6">
                   <Link
-                    href="#"
+                    href="/swap"
                     className="flex items-center gap-2 text-muted-foreground transition-colors hover:text-foreground"
                     prefetch={false}
                   >
@@ -185,7 +179,7 @@ export function Header() {
                     Swap
                   </Link>
                   <Link
-                    href="#"
+                    href="/bridge"
                     className="flex items-center gap-2 text-muted-foreground transition-colors hover:text-foreground"
                     prefetch={false}
                   >
@@ -193,7 +187,7 @@ export function Header() {
                     Bridge
                   </Link>
                   <Link
-                    href="#"
+                    href="/pool"
                     className="flex items-center gap-2 text-muted-foreground transition-colors hover:text-foreground"
                     prefetch={false}
                   >
@@ -201,12 +195,36 @@ export function Header() {
                     Pools
                   </Link>
                   <Link
-                    href="#"
+                    href="/stake"
                     className="flex items-center gap-2 text-muted-foreground transition-colors hover:text-foreground"
                     prefetch={false}
                   >
                     <StickerIcon className="h-5 w-5" />
                     Stake
+                  </Link>
+                  <Link
+                    href="/buySTX"
+                    className="flex items-center gap-2 text-muted-foreground transition-colors hover:text-foreground"
+                    prefetch={false}
+                  >
+                    <CoinsIcon className="h-5 w-5" />
+                    Buy STX
+                  </Link>
+                  <Link
+                    href="/mint-nft"
+                    className="flex items-center gap-2 text-muted-foreground transition-colors hover:text-foreground"
+                    prefetch={false}
+                  >
+                    <StickerIcon className="h-5 w-5" />
+                    Mint NFT
+                  </Link>
+                  <Link
+                    href="/nft-market"
+                    className="flex items-center gap-2 text-muted-foreground transition-colors hover:text-foreground"
+                    prefetch={false}
+                  >
+                    <StickerIcon className="h-5 w-5" />
+                    NFT Market
                   </Link>
                 </div>
               </div>
